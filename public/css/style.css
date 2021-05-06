@@ -1,0 +1,97 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+
+
+html {
+    position: relative;
+    min-height: 100%;
+  }
+  body {
+    margin-bottom: 60px; /* Margin bottom by footer height */
+    /* background-color: rgb(43, 43, 43) ; */
+    background-image: linear-gradient(160deg, rgba(60,64,70,.6)55%, rgba(207, 209, 212,.4) ), url('/img/bg.jpg')  ;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px; /* Set the fixed height of the footer here */
+    line-height: 60px; /* Vertically center the text there */
+
+    font-size: 1rem;
+    z-index: 50;
+  }
+  
+  
+  /* Custom page CSS
+  -------------------------------------------------- */
+  /* Not required for template or sticky footer method. */
+  
+  .container {
+    width: auto;
+    max-width: 680px;
+    padding: 0 15px;
+  }
+
+  .content{
+      margin-top: 4.5rem;
+  }
+  #label-de-bai{
+    font-family: 'Itim', cursive;
+    font-weight: bolder;
+    text-transform: uppercase;
+  }
+
+  .font-itim{
+    font-family: 'Itim', cursive !important;
+  }
+.toan-tu{
+    display: inline-block;
+    padding: .1rem .3rem;
+    font-size: 1.2rem;
+}
+.toan-tu:hover{
+    border: rgb(161, 161, 161) .3px solid;
+    background-color: rgba(83, 109, 226, 0.466);
+}
+
+#noi-dung{
+  background-color: white;
+  color: black;
+}
+
+.bai-giai{
+  padding-top: 1rem;
+  /* border-top:.5px black solid ;  */
+}
+
+.loi-giai-row{
+  background-color: white;
+  /* border: .5px rgb(197, 197, 197) solid; */
+  box-shadow: rgb(163, 163, 163) 1px 1px .5px .5px;
+  border-radius: 2px;
+}
+
+.bottom-trang-tri{
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bolder;
+  text-align: center;
+  margin-top: 0;
+}
+
+.tien-de-giai{
+  background-color: white;
+  border: .5px rgb(197, 197, 197) solid;
+  border-radius: 3px;
+  padding: .5rem 2rem;
+  margin-bottom: .4rem;
+}

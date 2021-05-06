@@ -1,0 +1,28 @@
+{
+  "name": "giaitoanroirac",
+  "version": "1.0.0",
+  "description": "web giai toan roi rac chuong logic, quan he, dai so boolean",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "nodemon ./src/server.ts --exec ts-node",
+    "dev2": "node ./src/server.ts --exec ts-node",
+    "start": "node ./dist/server.js"
+  },
+  "author": "KhongNhoTen",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "^4.17.11",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
