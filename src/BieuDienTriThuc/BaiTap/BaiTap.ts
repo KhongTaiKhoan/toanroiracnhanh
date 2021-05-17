@@ -1,5 +1,5 @@
 import { BieuThucMenhDe } from "../ChuongLogic/ThanhPhanC/BieuThucMenhDe";
-import { TapLuat } from '../ChuongLogic/ThanhPhanRules/TapLuat';
+import { TapLuat } from '../ChuongLogic/ThanhPhanRules/TapLuatTuongDuong';
 import { LoiGiaiChuyenDoi } from "./BaiTap_Logic/LoiGiaiChuyenDoi";
 
 export abstract class BaiTap{
@@ -7,5 +7,5 @@ export abstract class BaiTap{
     constructor(){
         this.tapLuat = new TapLuat();
     }
-    abstract giai(deBai?:string):LoiGiaiChuyenDoi|void|any;
+    abstract giai(deBai?:string):LoiGiaiChuyenDoi|any;
 }

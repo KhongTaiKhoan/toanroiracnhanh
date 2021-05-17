@@ -29,12 +29,11 @@ class BieuThucMenhDe {
 
     public get id(): string {        
         if(this.toanTu.tenToanTu === ToanTu.PHU_DINH){
-            if(Helper.IS_BIEU_THUC_SO_CAP(this)) return  this.toanTu.toString()+this._id;
-            
+            if(Helper.IS_BIEU_THUC_SO_CAP(this)) return  this.toanTu.toString()+this._id;        
             return   this.toanTu.toString()+"("+this.bieuThucCons[0].id+")";
         }
         if(Helper.IS_BIEU_THUC_SO_CAP(this)){
-            return this._id;
+            return  this.toanTu.toString()+this._id;        
         }
 
         if(this.toanTu.tenToanTu === ToanTu.TUONG_DUONG || this.toanTu.tenToanTu === ToanTu.KEO_THEO ){
@@ -105,7 +104,11 @@ class BieuThucMenhDe {
 
 
     public get chanTri(): boolean {
-        return this._chanTri;
+        if(Helper.IS_BIEU_THUC_SO_CAP(this) ){
+            if(this.toanTu.tenToanTu === ToanTu.PHU_DINH)return !this._chanTri; 
+            return this._chanTri;
+        }
+        return this.toanTu.tinhToan(this);
     }
     public set chanTri(value: boolean) {
         this._chanTri = value;

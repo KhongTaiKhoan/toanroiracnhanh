@@ -8,6 +8,6 @@ export class LoiGiaiChuyenDoi{
         bieuThucGoc:string,
         bieuThucGoc_id:string,
     }[]=[];
-    public ketQua:BieuThucMenhDe|null = null;
+    public ketQua:BieuThucMenhDe = new BieuThucMenhDe();
 
 }

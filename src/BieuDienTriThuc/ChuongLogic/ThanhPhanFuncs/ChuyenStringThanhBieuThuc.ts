@@ -74,6 +74,9 @@ export class ChuyenStringThanhBieuThuc{
                 }
             }
         }
+        if(!Helper.IS_BIEU_THUC_SO_CAP(hienTai)&& hienTai.bieuThucCons.length === 1 && hienTai.toanTu.tenToanTu === ToanTu.NONE)
+           return hienTai.bieuThucCons[0];
+           
         return hienTai;
     }
 }

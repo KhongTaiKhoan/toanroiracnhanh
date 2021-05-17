@@ -2,8 +2,9 @@ let menhDeGoc = '';
 // let countApha = 0;
 let countSpe = 0;
 
+
 $('.toan-tu').on('click',(e)=>{
-    let insert_ = $(e.currentTarget).html();
+    let insert_ = $(e.currentTarget).html().trim();
     if(insert_==='TRUE')insert_=1;
     if(insert_==='FALSE')insert_=0;
     $('#noi-dung').append(insert_);
@@ -40,6 +41,7 @@ $('#noi-dung').on('keyup',e=>{
 })
 
 $('#nop').on('click', e => {
+    $('.bai-giai').removeClass('d-none');
     $('#chi-tiet-loi-giai').html('');
     console.log(menhDeGoc);
     $.ajax({

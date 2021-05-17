@@ -1,6 +1,6 @@
 import { BieuThucMenhDe } from "../../ChuongLogic/ThanhPhanC/BieuThucMenhDe"
 import { Helper } from '../../ChuongLogic/ThanhPhanFuncs/Helper';
-import { TapLuat } from '../../ChuongLogic/ThanhPhanRules/TapLuat';
+import { TapLuat } from '../../ChuongLogic/ThanhPhanRules/TapLuatTuongDuong';
 import { BaiTap } from '../BaiTap';
 import { LoiGiaiChuyenDoi } from './LoiGiaiChuyenDoi';
 
@@ -11,14 +11,14 @@ export class RutGonBieuThuc extends BaiTap{
     private loiGia:LoiGiaiChuyenDoi  = new LoiGiaiChuyenDoi();
     constructor(root:BieuThucMenhDe){
         super();
-        this.root=root;
+        this.root=Helper.SAO_CHEP(root);
     }
 
-    giai(): LoiGiaiChuyenDoi|void {
+    giai(): LoiGiaiChuyenDoi {
 
+        // console.log(this.root.id);
         this.root= this.rutGon(this.root,null,-1);
-        this.loiGia.ketQua = this.root;
-        // console.log(this.loiGia.loiGiai[0]);
+        this.loiGia.ketQua = Helper.SAO_CHEP(this.root);
         return this.loiGia;
         
     }

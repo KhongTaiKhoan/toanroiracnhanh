@@ -9,6 +9,9 @@ export class KeoTheo extends ToanTu{
     }
 
     tinhToan(bieuThuc: BieuThucMenhDe): boolean {
+        // console.log(`- CT: ${bieuThuc.bieuThucCons[0].chanTri}   ${bieuThuc.bieuThucCons[1].chanTri}`)
+        if(bieuThuc.bieuThucCons[0].chanTri === true &&  bieuThuc.bieuThucCons[1].chanTri === false)
         return false;
+        return true;
     }
 }

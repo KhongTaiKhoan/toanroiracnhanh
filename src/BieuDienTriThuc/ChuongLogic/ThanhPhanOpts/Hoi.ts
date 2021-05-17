@@ -7,7 +7,10 @@ export class Hoi extends ToanTu{
         this.tenToanTu = ToanTu.HOI;
     }
     tinhToan(bieuThuc: BieuThucMenhDe): boolean {
-        throw new Error("Method not implemented.");
+        for(let i = 0;i<bieuThuc.bieuThucCons.length;i++){
+            if(bieuThuc.bieuThucCons[i].chanTri === false) return false;  
+        }
+        return true;
     }
     
 }

@@ -11,11 +11,11 @@ import router from "../routers/Routing";
 class App {
     private app: express.Application;
     private port: Number;
-    private bai: BaiTap;
+    // private bai: BaiTap;
     constructor(port: Number) {
         this.app = express();
         this.port = port;
-        this.bai = new MenhDeTuongDuong('');
+        // this.bai = new MenhDeTuongDuong().gia;
 
     }
  

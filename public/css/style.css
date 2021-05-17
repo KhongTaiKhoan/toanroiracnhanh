@@ -95,3 +95,54 @@ html {
   padding: .5rem 2rem;
   margin-bottom: .4rem;
 }
+
+.them-xoa-menh-de {
+   position: relative;
+   bottom: 10px;
+   left: 90%;
+}
+
+
+.them-xoa-menh-de .them ,.them-xoa-menh-de .xoa{
+  margin-right: 1px;  
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+}
+.them-xoa-menh-de .them {
+  background-color: rgb(127, 247, 127);
+  
+}
+
+.them-xoa-menh-de .xoa{
+  background-color: rgb(245, 95, 58);
+}
+
+.menh-de-them-moi_last .them ,.menh-de-them-moi_last .xoa{
+  display: inline-block;
+}
+
+#ket-luan{
+   width: 100%;
+   background-color: white;
+   padding: 10px 5px;
+   border-radius: 5px;
+}
+#text-ket-luan{
+  background-color: white;
+  width: 17%;
+}
+#noi-dung-ket-luan{
+  width: 83%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+
+  outline: none;
+}
+
+#chi-tiet-loi-giai .left-sd{
+  width: 30%;
+}

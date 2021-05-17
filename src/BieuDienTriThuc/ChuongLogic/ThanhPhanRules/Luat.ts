@@ -1,23 +1,28 @@
 import { BieuThucMenhDe } from '../ThanhPhanC/BieuThucMenhDe';
 import { ILuat } from './ILuat';
 import { LuatMessage } from './LuatMessage';
-export class Luat  implements ILuat{
+import { DieuKien } from './DieuKienLuat';
+import { KetQua } from './KetQuaLuat';
+export class Luat {
     private _tenLuat: string;
-    private _Iluat: ILuat ;
     private _id: number = 0;
+    private _dieuKien: DieuKien;
+    private _ketQua: KetQua;
     
-    constructor(id:number,_tenLuat: string, _Iluat:ILuat) {
+   
+    constructor(id:number,_tenLuat: string,dieuKien:DieuKien,ketQua:KetQua ) {
         this._tenLuat = _tenLuat;
-        this._Iluat = _Iluat;
         this.id = id;
+        this._dieuKien = dieuKien;
+        this._ketQua = ketQua;
     }
     boKiemTra(P: BieuThucMenhDe): LuatMessage | null {
-        return this.Iluat.boKiemTra(P);
+        return this.dieuKien.boKiemTra(P);
     }
-    ketQua(P: BieuThucMenhDe, con?: LuatMessage): BieuThucMenhDe {
+    nhanKetQua(P: BieuThucMenhDe, con?: LuatMessage): BieuThucMenhDe {
         if(con === undefined)
-        return this.Iluat.ketQua(P);
-        return this.Iluat.ketQua(P,con);
+        return this.ketQua.ketQua(P);
+        return this.ketQua.ketQua(P,con);
     }
 
 
@@ -26,7 +31,7 @@ export class Luat  implements ILuat{
         con = this.boKiemTra(P);
         if (con !== null) {
             // console.log(`- AP DUNG ${this.tenLuat} cho bieu thuc: ${con.bieuThuc.id}, DUOC KET QUA:`);
-            return {goc:this.ketQua(P, con),con:con.bieuThuc };
+            return {goc:this.ketQua.ketQua(P, con),con:con.bieuThuc };
         }
         return null;
       
@@ -41,13 +46,6 @@ export class Luat  implements ILuat{
     }
 
 
-    public get Iluat(): ILuat  {
-        return this._Iluat;
-    }
-    public set Iluat(value: ILuat ) {
-        this._Iluat = value;
-    }
-
 
     public get id(): number {
         return this._id;
@@ -56,4 +54,18 @@ export class Luat  implements ILuat{
         this._id = value;
     }
 
+    public get dieuKien(): DieuKien {
+        return this._dieuKien;
+    }
+    public set dieuKien(value: DieuKien) {
+        this._dieuKien = value;
+    }
+    
+    public get ketQua(): KetQua {
+        return this._ketQua;
+    }
+    public set ketQua(value: KetQua) {
+        this._ketQua = value;
+    }
+   
 }

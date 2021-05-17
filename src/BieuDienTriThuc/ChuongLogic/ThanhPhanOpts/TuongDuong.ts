@@ -8,7 +8,7 @@ export class TuongDuong extends ToanTu{
         this.tenToanTu = ToanTu.TUONG_DUONG;
     }
     tinhToan(bieuThuc: BieuThucMenhDe): boolean {
-        throw new Error("Method not implemented.");
+        return bieuThuc.bieuThucCons[0].chanTri === bieuThuc.bieuThucCons[1].chanTri;
     }
     
 }
