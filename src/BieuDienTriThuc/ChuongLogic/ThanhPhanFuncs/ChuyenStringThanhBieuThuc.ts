@@ -11,6 +11,7 @@ export class ChuyenStringThanhBieuThuc{
        
        for(let i:number=0;i<chuoi.length;i++){
             if (chuoi[i] === ' ') continue;
+            if (chuoi[i] === '\n' || chuoi[i] === '\r') continue;
             else if (chuoi[i] === '1') {
                 let bt_con = Helper.BIEU_THUC_SO_CAP(BieuThucMenhDe.MA_HANG_DUNG);
                 bt_con.cha = hienTai;

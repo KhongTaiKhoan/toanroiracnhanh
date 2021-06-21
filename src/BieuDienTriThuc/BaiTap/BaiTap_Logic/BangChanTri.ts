@@ -78,8 +78,10 @@ export class BangChanTri extends BaiTap {
     themBieuThucSoCap(P: BieuThucMenhDe) {
         if (Helper.IS_BIEU_THUC_SO_CAP(P)) {
             let index = this.bieuThucSoCap.findIndex(e => e.id === P.id)
-            if (index === -1) {this.bieuThucSoCap.push(P);
-            return this.bieuThucSoCap[this.bieuThucSoCap.length-1];}
+            if (index === -1) {
+                this.bieuThucSoCap.push(P);
+                return this.bieuThucSoCap[this.bieuThucSoCap.length-1];
+            }
             else return this.bieuThucSoCap[index];
         }
         for (let i = 0; i < P.bieuThucCons.length; i++) {
