@@ -124,7 +124,7 @@ html {
   display: inline-block;
 }
 
-#ket-luan{
+#ket-luan,.ket-luan{
    width: 100%;
    background-color: white;
    padding: 10px 5px;
@@ -134,7 +134,7 @@ html {
   background-color: white;
   width: 17%;
 }
-#noi-dung-ket-luan{
+#noi-dung-ket-luan,.noi-dung-ket-luan{
   width: 83%;
   border-top: none;
   border-left: none;
@@ -145,4 +145,8 @@ html {
 
 #chi-tiet-loi-giai .left-sd{
   width: 30%;
+}
+
+.cell-active{
+  background-color: rgb(218, 158, 80);
 }

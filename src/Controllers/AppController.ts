@@ -7,6 +7,9 @@ import { Helper } from '../BieuDienTriThuc/ChuongLogic/ThanhPhanFuncs/Helper';
 import { SuyDien, LoiGiaiSuyDien } from '../BieuDienTriThuc/BaiTap/BaiTap_Logic/SuyLuanLogic';
 import { ToanTuFactory } from '../BieuDienTriThuc/ChuongLogic/ThanhPhanOpts/ToanTuFactory';
 import { BangChanTri } from '../BieuDienTriThuc/BaiTap/BaiTap_Logic/BangChanTri';
+import { BaiTap } from '../BieuDienTriThuc/BaiTap/BaiTap';
+import { ToiUuHoa } from '../BieuDienTriThuc/DaiSoBoolean/ToiThieuHoaKarNaugh';
+import { KetQuaRutGonHamBoolean } from '../BieuDienTriThuc/DaiSoBoolean/BoQuanLyBiaKarNaugh';
 
 export  class Controller{
     public index(req:express.Request,res:express.Response){
@@ -137,5 +140,49 @@ export  class Controller{
         }
     }
 
+    //#endregion
+
+    //#region  HAM BOOLEAN
+    public getHamBoolean(req:express.Request,res:express.Response){
+        let toanTus:string[] =[];
+        ToanTu.kyHieus.forEach(e=>{toanTus.push(e)});
+        toanTus.push('(')
+        toanTus.push(')')
+        toanTus.push('\u2261')
+        toanTus.push('TRUE')
+        toanTus.push('FALSE')
+
+        res.render('RutGonHamBoolean.ejs',{toanTus:toanTus});
+    }
+    public postHamBoolean(req:express.Request,res:express.Response){
+        let baiTap:BaiTap = new ToiUuHoa();
+    
+        let ketQuaRutGonHamBoolean:KetQuaRutGonHamBoolean|null = baiTap.giai(req.body.deBai);
+        if(ketQuaRutGonHamBoolean===null)
+          res.send({mes:false});
+          
+        else {
+            let bienCoSo:string[] = [];
+            ketQuaRutGonHamBoolean.bienCoSo.forEach(e=>{bienCoSo.push(Helper.IN(e)); });
+
+            let bieuThucLonChuyenDoi:string[]=[];
+            ketQuaRutGonHamBoolean.bieuThucLonChuyenDoi.forEach(e=>{bieuThucLonChuyenDoi.push(Helper.IN(e))});
+
+            let bieuThucChuyenDoi:string[]=[];
+            ketQuaRutGonHamBoolean.bieuThucChuyenDoi.forEach(e=>{bieuThucChuyenDoi.push(Helper.IN(e))});
+            res.send({
+                mes: true,
+                deBai: Helper.IN(ketQuaRutGonHamBoolean.deBai),
+                bienCoSo:bienCoSo,
+                maTran:ketQuaRutGonHamBoolean.maTran,
+                teBaoLon:ketQuaRutGonHamBoolean.teBaoLon ,
+                bieuThucLonChuyenDoi:bieuThucLonChuyenDoi,
+                bieuThucChuyenDoi:bieuThucChuyenDoi,
+                mangDanhDau:ketQuaRutGonHamBoolean.mangDanhDau
+
+
+            });
+        }
+    }
     //#endregion
 }

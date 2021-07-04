@@ -1,7 +1,7 @@
 import {App} from "./core/App";
 import * as config from "dotenv";
-import { ToiUuHoa } from './BieuDienTriThuc/DaiSoBoolean/ToiThieuHoaKarNaugh';
-import { BaiTap } from "./BieuDienTriThuc/BaiTap/BaiTap";
+
+import { XacDinhTinhChatQuanHe } from "./BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanFuncs/XacDinhTinhChatQuanHe";
 
 
 // config.config();
@@ -11,5 +11,7 @@ import { BaiTap } from "./BieuDienTriThuc/BaiTap/BaiTap";
 // let app = new App(port);
 // app.run();
 
-let baiTap:BaiTap = new  ToiUuHoa();
-baiTap.giai();
+let xacDinh = new XacDinhTinhChatQuanHe();
+// console.log(bt.id);
+xacDinh.giai();
+

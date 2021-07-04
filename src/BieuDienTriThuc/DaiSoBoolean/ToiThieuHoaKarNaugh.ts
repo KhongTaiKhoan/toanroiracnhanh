@@ -11,29 +11,28 @@ import { ChuyenStringThanhBieuThuc } from '../ChuongLogic/ThanhPhanFuncs/ChuyenS
 export class ToiUuHoa extends BaiTap{
 
    giai(deBai?: string) {
- 
-      // let final:BieuThucMenhDe = ChuyenStringThanhBieuThuc
-      // .chuyenDoi(`(¬a∧¬b∧¬c∧¬d)∨(¬a∧¬b∧¬c∧d)∨(¬a∧¬b∧c∧¬d)∨(¬a∧b∧¬c∧d)∨(a∧¬b∧¬c∧¬d)∨(a∧¬b∧ c∧¬d)`);
+      if(!deBai)return null;
 
-
-      let num:number[]=[0,4,6,8,12,13,14,15,16,17,18,21,24,25,26,28,29,31];
-
-      let fac = new QuanLyKarnaugh_Factory();
-      let taoKN:BoQuanLyBiaKarNaugh =  fac.createByArrayNumber(num,5);
-      // console.log(final.id);
-      taoKN.duyet();
-      let n: KetQuaRutGonHamBoolean | null = taoKN.getKetQua();
-      if (n !== null) {
-         console.log(`\nDE BAI: \n${Helper.IN(n.deBai)}`);
-         console.log('\nTE BAO LON: ')
-         console.log(n.teBaoLon);
-         for (let i = 0; i < n.bieuThucChuyenDoi.length; i++) {
-            console.log('\nTE BAO THIET YEU:');
-            console.log(Helper.IN(n.bieuThucChuyenDoi[i]));
+      let quanLyKarnaugh_Factory:QuanLyKarnaugh_Factory = new QuanLyKarnaugh_Factory(); 
+      let quanLyBiaKarnaugh:BoQuanLyBiaKarNaugh|null=null;
+      if(deBai.includes(',')){
+         let num:number[]=[];
+         let split=deBai.split(',');
+         for (let i = 0; i < split.length-1; i++) {
+            num.push(parseInt(split[i]));
          }
-      } else {
-         console.log('NULL');
+         // console.log(num);
+         // console.log(parseInt(split[split.length-1]));
+         quanLyBiaKarnaugh = quanLyKarnaugh_Factory.createByArrayNumber(num,parseInt(split[split.length-1]));
+
+      }else {
+         let bt:BieuThucMenhDe = ChuyenStringThanhBieuThuc.chuyenDoi(deBai);
+         quanLyBiaKarnaugh = quanLyKarnaugh_Factory.createByBieuThuc(bt); 
       }
+
+      quanLyBiaKarnaugh.duyet();
+      return quanLyBiaKarnaugh.getKetQua();
+   
    }
   
    

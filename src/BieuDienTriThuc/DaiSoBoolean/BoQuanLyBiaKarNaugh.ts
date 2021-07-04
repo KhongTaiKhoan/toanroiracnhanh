@@ -72,13 +72,17 @@ export class BoQuanLyBiaKarNaugh {
                    this.cacTeBao.push(e);
                 });
             });
+            let teBaoLon:BieuThucMenhDe[]=[];
+            for (let i = 0; i < this.cacTeBao.length; i++) {
+                teBaoLon.push(this.chuyen1TeBao(this.cacTeBao[i]));
+            }
 
             /// CAC TE BAO THIET YEU
             let thietYeu:number[][][]= this.teBaoThietYeu(this.mangDanhDau);
             let toiUu:number[][][]=this.ghiNhanTeBaoToiUu(thietYeu);
             let dsBieuThucDuocRutGon:BieuThucMenhDe[]=this.layTapHopBieuThucRutGon(toiUu);
             this.ketQua= new KetQuaRutGonHamBoolean(
-                this.deBai,tongHop.maTran,this.cacTeBao,thietYeu,toiUu,dsBieuThucDuocRutGon
+                this.deBai,this.danhSachBien,tongHop.maTran,this.cacTeBao,thietYeu,toiUu,dsBieuThucDuocRutGon,teBaoLon,this.mangDanhDau
             );
         }else
         this.ketQua=null;
@@ -94,13 +98,13 @@ export class BoQuanLyBiaKarNaugh {
         if(this.danhSachBien.length === 3){
             let maTran:number [][]= this.ghiCacTeBao(this.MA_TRAN_3_BIEN,danhDau);
             let bia = new BiaKarNaugh3Bien(maTran);
-            console.log(maTran);
+            // console.log(maTran);
             return {bia:bia,maTran:[maTran]};
 
         }
         else if(this.danhSachBien.length === 4){
             let maTran:number [][]= this.ghiCacTeBao(this.MA_TRAN_4_BIEN,danhDau);
-            console.log(maTran);
+            // console.log(maTran);
             let bia = new BiaKarNaugh4Bien(maTran);
             return {bia:bia,maTran:[maTran]};
            
@@ -110,7 +114,7 @@ export class BoQuanLyBiaKarNaugh {
             for (let index = 0; index < this.MA_TRAN_5_BIEN.length; index++) {
                 maTran.push(this.ghiCacTeBao(this.MA_TRAN_5_BIEN[index],danhDau));
             }
-            console.log(maTran);
+            // console.log(maTran);
             let bia = new BiaKarNaugh5Bien(maTran);
             return {bia:bia,maTran:maTran};
         }
@@ -292,6 +296,7 @@ export class BoQuanLyBiaKarNaugh {
 
           return ketQua;
     }
+
     private chuyen1TeBao(teBaoLon: number[]): BieuThucMenhDe {
         let boChuyenDoi: ChuyenDoiKarnaugh.ChuyenDoiTeBaoKarnaugh = ChuyenDoiKarnaugh.BoChuyenDoiKarNaugh_Factory.create(this.danhSachBien);
         let nhiPhan: string[] = [];
@@ -592,19 +597,25 @@ export namespace ChuyenDoiKarnaugh {
 
 export class KetQuaRutGonHamBoolean{
     deBai:BieuThucMenhDe;
+    bienCoSo:BieuThucMenhDe[];
     maTran:number[][][];
     teBaoLon:number[][];
     teBaoThietYeu:number[][][];
     teBaoToiUu:number[][][];
+    bieuThucLonChuyenDoi:BieuThucMenhDe[];
     bieuThucChuyenDoi:BieuThucMenhDe[];
+    mangDanhDau:number[];
 
-    constructor( deBai:BieuThucMenhDe,maTran:number[][][],teBaoLon:number[][],teBaoThietYeu:number[][][],teBaoToiUu:number[][][],bieuThucChuyenDoi:BieuThucMenhDe[]){
+    constructor( deBai:BieuThucMenhDe,bienCoSo:BieuThucMenhDe[],maTran:number[][][],teBaoLon:number[][],teBaoThietYeu:number[][][],teBaoToiUu:number[][][],bieuThucChuyenDoi:BieuThucMenhDe[],bieuThucLonChuyenDoi:BieuThucMenhDe[],mangDanhDau:number[]){
         this.deBai=deBai;
+        this.bienCoSo=bienCoSo;
         this.maTran=maTran;
         this.teBaoLon=teBaoLon;
         this.teBaoThietYeu=teBaoThietYeu;
         this.teBaoToiUu=teBaoToiUu; 
+        this.bieuThucLonChuyenDoi = bieuThucLonChuyenDoi;
         this.bieuThucChuyenDoi=bieuThucChuyenDoi;
+        this.mangDanhDau = mangDanhDau;
     }
 }
 
@@ -619,12 +630,14 @@ export class QuanLyKarnaugh_Factory{
     }
 
     public createByArrayNumber(num:number[],length?:number,bienCoSo?:BieuThucMenhDe[]):BoQuanLyBiaKarNaugh{
-        if (bienCoSo) {
+        if (typeof bienCoSo !== 'undefined') {
             this.bienCoSo = bienCoSo;
             length = bienCoSo.length;
-        }else 
+        }else {
+            this.duyetBienCoSo(); 
            this.bienCoSo = this.bienCoSo.splice(0,length);
-        this.duyetBienCoSo(); 
+        }
+
         
         let boChuyenDoiKarNaugh: ChuyenDoiKarnaugh.ChuyenDoiTeBaoKarnaugh = ChuyenDoiKarnaugh.BoChuyenDoiKarNaugh_Factory.create(this.bienCoSo);
         let builder: BieuThucBuilder = new BieuThucBuilder().addToanTu(ToanTu.TUYEN);
