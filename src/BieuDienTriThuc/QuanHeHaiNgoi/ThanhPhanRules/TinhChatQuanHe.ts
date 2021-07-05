@@ -253,11 +253,7 @@ export class BoKiemTraTinhChatDieuKien extends BoKiemTraTinhChat {
 
     tinhPhanXa(id: number) {
         if (this.condition !== null && this.tinhChat !== null) {
-            let bt: string[] = [];
-            this.condition?.bienCoSo.forEach(e => {
-                bt.push(e.id);
-            });
-
+            let bt: string[] = ['a','b'];
 
             let l: KhonGianSoNguyen.BieuThuc[] = [];
             l.push(KhonGianSoNguyen.BieuThuc.copy(this.condition.left));

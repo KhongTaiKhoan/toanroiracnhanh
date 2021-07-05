@@ -182,57 +182,46 @@ export class ChiTietSuyDien {
 
 export class SuyDienQuanHeDaiSo_Factory{    
     private create_BANG(GT:QuanHeDaiSo[],KL:QuanHeDaiSo):SuyDienQuanHeDaiSo{
-        let suyDien:SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT,KL);
-        let luat:LuatSuyDien[]=[];
+        let suyDien: SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT, KL);
+        let luat: LuatSuyDien[] = [];
+
+        /// LUAT DOI VI TRI 
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+               let newCon   = QuanHeDaiSo.copy(R);
+               let bt=newCon.left;
+               newCon.left = newCon.right;
+               newCon.right = bt; 
+               return this.suyDien.insertGT([R], newCon);
+            }
+        }(suyDien));
 
         /// luat bac cau
-        luat.push(new class extends LuatSuyDien{
-            apDung(R:QuanHeDaiSo):boolean{
-                let index = this.suyDien.GT.findIndex(e=>{return e.toString() !== R.toString() && e.left.id === R.right.id;});
-                if(index!==-1){
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+                let index = this.suyDien.GT.findIndex(e => { return e.toString() !== R.toString() && e.left.id === R.right.id; });
+                if (index !== -1) {
                     let newCon = QuanHeDaiSo.copy(R);
                     newCon.left = R.left;
                     newCon.right = this.suyDien.GT[index].right;
                     // console.log('\n'+newCon.toString()+'\n');
-                    return this.suyDien.insertGT([R,this.suyDien.GT[index]],newCon);
-                }  
+                    return this.suyDien.insertGT([R, this.suyDien.GT[index]], newCon);
+                }
                 return false;
             }
         }(suyDien));
 
         /// luat bac cau 2
-        luat.push(new class extends LuatSuyDien{
-            apDung(R:QuanHeDaiSo):boolean{
-                let index = this.suyDien.GT.findIndex(e=>{return e.toString() !== R.toString() && e.right.id === R.left.id;});
-                if(index!==-1){
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+                let index = this.suyDien.GT.findIndex(e => { return e.toString() !== R.toString() && e.right.id === R.left.id; });
+                if (index !== -1) {
                     let newCon = QuanHeDaiSo.copy(R);
                     newCon.left = R.right;
                     newCon.right = this.suyDien.GT[index].left;
                     // console.log('\n'+newCon.toString()+'\n');
-                    return this.suyDien.insertGT([R,this.suyDien.GT[index]],newCon);
-                }  
-                return false;
-            }
-        }(suyDien));
-        suyDien.luat = luat;
-        return suyDien;
-    }           
-    
-    private create_LON_HON(GT:QuanHeDaiSo[],KL:QuanHeDaiSo):SuyDienQuanHeDaiSo{
-        let suyDien:SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT,KL);
-        let luat:LuatSuyDien[]=[];
-
-        /// luat bac cau
-        luat.push(new class extends LuatSuyDien{
-            apDung(R:QuanHeDaiSo):boolean{
-                let index = this.suyDien.GT.findIndex(e=>{return e.toString() !== R.toString() && e.left.id === R.right.id;});
-                if(index!==-1){
-                    let newCon = QuanHeDaiSo.copy(R);
-                    newCon.left = R.left;
-                    newCon.right = this.suyDien.GT[index].right;
-                    // console.log('\n'+newCon.toString()+'\n');
-                    return this.suyDien.insertGT([R,this.suyDien.GT[index]],newCon);
-                }  
+                    return this.suyDien.insertGT([R, this.suyDien.GT[index]], newCon);
+                }
                 return false;
             }
         }(suyDien));
@@ -240,21 +229,21 @@ export class SuyDienQuanHeDaiSo_Factory{
         return suyDien;
     }
 
-    private create_NHO_HON(GT:QuanHeDaiSo[],KL:QuanHeDaiSo):SuyDienQuanHeDaiSo{
-        let suyDien:SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT,KL);
-        let luat:LuatSuyDien[]=[];
+    private create_LON_HON(GT: QuanHeDaiSo[], KL: QuanHeDaiSo): SuyDienQuanHeDaiSo {
+        let suyDien: SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT, KL);
+        let luat: LuatSuyDien[] = [];
 
         /// luat bac cau
-        luat.push(new class extends LuatSuyDien{
-            apDung(R:QuanHeDaiSo):boolean{
-                let index = this.suyDien.GT.findIndex(e=>{return e.toString() !== R.toString() && e.right.id === R.left.id;});
-                if(index!==-1){
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+                let index = this.suyDien.GT.findIndex(e => { return e.toString() !== R.toString() && e.left.id === R.right.id; });
+                if (index !== -1) {
                     let newCon = QuanHeDaiSo.copy(R);
-                    newCon.left = R.right;
-                    newCon.right = this.suyDien.GT[index].left;
+                    newCon.left = R.left;
+                    newCon.right = this.suyDien.GT[index].right;
                     // console.log('\n'+newCon.toString()+'\n');
-                    return this.suyDien.insertGT([R,this.suyDien.GT[index]],newCon);
-                }  
+                    return this.suyDien.insertGT([R, this.suyDien.GT[index]], newCon);
+                }
                 return false;
             }
         }(suyDien));
@@ -262,28 +251,60 @@ export class SuyDienQuanHeDaiSo_Factory{
         return suyDien;
     }
 
-    private create_LON_HON_BANG (GT:QuanHeDaiSo[],KL:QuanHeDaiSo):SuyDienQuanHeDaiSo{
-        let suyDien:SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT,KL);
-        let luat:LuatSuyDien[]=[];
+    private create_NHO_HON(GT: QuanHeDaiSo[], KL: QuanHeDaiSo): SuyDienQuanHeDaiSo {
+        let suyDien: SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT, KL);
+        let luat: LuatSuyDien[] = [];
 
         /// luat bac cau
-        luat.push(new class extends LuatSuyDien{
-            apDung(R:QuanHeDaiSo):boolean{
-                let index = this.suyDien.GT.findIndex(e=>{return e.toString() !== R.toString() && e.left.id === R.right.id;});
-                if(index!==-1){
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+                let index = this.suyDien.GT.findIndex(e => { return e.toString() !== R.toString() && e.right.id === R.left.id; });
+                if (index !== -1) {
+                    let newCon = QuanHeDaiSo.copy(R);
+                    newCon.left = R.right;
+                    newCon.right = this.suyDien.GT[index].left;
+                    // console.log('\n'+newCon.toString()+'\n');
+                    return this.suyDien.insertGT([R, this.suyDien.GT[index]], newCon);
+                }
+                return false;
+            }
+        }(suyDien));
+        suyDien.luat = luat;
+        return suyDien;
+    }
+
+    private create_LON_HON_BANG(GT: QuanHeDaiSo[], KL: QuanHeDaiSo): SuyDienQuanHeDaiSo {
+        let suyDien: SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT, KL);
+        let luat: LuatSuyDien[] = [];
+
+         /// LUAT DOI VI TRI 
+         luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+               let newCon   = QuanHeDaiSo.copy(R);
+               let bt=newCon.left;
+               newCon.left = newCon.right;
+               newCon.right = bt; 
+               return this.suyDien.insertGT([R], newCon);
+            }
+        }(suyDien));
+        /// luat bac cau
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+                let index = this.suyDien.GT.findIndex(e => { return e.toString() !== R.toString() && e.left.id === R.right.id; });
+                if (index !== -1) {
                     let newCon = QuanHeDaiSo.copy(R);
                     newCon.left = R.left;
                     newCon.right = this.suyDien.GT[index].right;
                     // console.log('\n'+newCon.toString()+'\n');
-                    return this.suyDien.insertGT([R,this.suyDien.GT[index]],newCon);
-                }  
+                    return this.suyDien.insertGT([R, this.suyDien.GT[index]], newCon);
+                }
                 return false;
             }
         }(suyDien));
 
         /// luat bac cau 2
-        luat.push(new class extends LuatSuyDien{
-            apDung(R:QuanHeDaiSo):boolean{
+        luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
                 let index = this.suyDien.GT.findIndex(e=>{return e.toString() !== R.toString() && e.right.id === R.left.id;});
                 if(index!==-1){
                     let newCon = QuanHeDaiSo.copy(R);
@@ -303,6 +324,17 @@ export class SuyDienQuanHeDaiSo_Factory{
         let suyDien:SuyDienQuanHeDaiSo = new SuyDienQuanHeDaiSo(GT,KL);
         let luat:LuatSuyDien[]=[];
 
+         /// LUAT DOI VI TRI 
+         luat.push(new class extends LuatSuyDien {
+            apDung(R: QuanHeDaiSo): boolean {
+               let newCon   = QuanHeDaiSo.copy(R);
+               let bt=newCon.left;
+               newCon.left = newCon.right;
+               newCon.right = bt; 
+               return this.suyDien.insertGT([R], newCon);
+            }
+        }(suyDien));
+        
         /// luat bac cau
         luat.push(new class extends LuatSuyDien{
             apDung(R:QuanHeDaiSo):boolean{
@@ -539,8 +571,8 @@ export class SuyDienQuanHeDaiSo_Factory{
                 let index = this.suyDien.GT.findIndex(e=>{return e.right.id === R.left.id;});
                 if(index!==-1){
                     let newCon = QuanHeDaiSo.copy(R);
-                    newCon.left = R.right;
-                    newCon.right = this.suyDien.GT[index].left;
+                    newCon.right = R.right;
+                    newCon.left = this.suyDien.GT[index].left;
                     // console.log('\n'+newCon.toString()+'\n');
                     return this.suyDien.insertGT([R,this.suyDien.GT[index]],newCon);
                 }  

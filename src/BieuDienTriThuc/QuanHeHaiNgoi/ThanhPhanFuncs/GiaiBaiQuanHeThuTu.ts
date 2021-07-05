@@ -1,10 +1,14 @@
 import { QuanHe, QuanHeFactory } from '../ThanhPhanC/QuanHe';
 import { QuanHeDaiSo } from '../ThanhPhanC/QuanHeDaiSo';
 import { TapHop } from '../ThanhPhanC/TapHop';
-export class XacDinhBaiQuanHeThuTu{
+import { BaiTap } from '../../BaiTap/BaiTap';
+import { PhanLoaiQuanHe } from './PhanLoaiQuanHe';
+export class XacDinhBaiQuanHeThuTu {
+   
     private R:QuanHe;
     private Parent:TapHop;
     constructor(R:QuanHe){
+        
         this.R = R;
         this.Parent = R.khongGianMau;
         this.Parent.array = this.Parent.array.sort((a,b)=>{
@@ -14,7 +18,14 @@ export class XacDinhBaiQuanHeThuTu{
         }) ; 
     }
 
-    private LietKe():void{
+    xacDinh():ChiTietTinhChatQuanHeThuTu {
+        let x = PhanLoaiQuanHe.phanLoai(PhanLoaiQuanHe.THU_TU,this.R);
+        if(!x)throw new Error('Quan hệ không phải là quan hệ thứ tự');
+       if(this.Parent.getKind() !== TapHop.TAP_HOP_LIET_KE) throw new Error('Tap khong gian mau phai la tap liet ke');
+       if(this.R.getKind() === TapHop.TAP_HOP_LIET_KE)return this.LietKe();
+       return this.DieuKien();
+    }
+    private LietKe():ChiTietTinhChatQuanHeThuTu{
         let maTran:number[][]= this.khoiTaoMaTran();
         // maTran.forEach(e=>{
         //     let str='';
@@ -63,20 +74,29 @@ export class XacDinhBaiQuanHeThuTu{
        
 
         /// SAO CHEP
+        let seed_value:number[][]=[];
+        
         for (let i = 0; i < seed.length; i++) {
+           
            for (let j = 0; j < seed[i].length; j++) {
                seed[i][j].id = this.Parent.array[seed[i][j].id].element[0];
+             //  row.push(this.Parent.array[seed[i][j].id].element[0]);
            }
+          // seed_value.push(row);
         }
-
+        
+        
         //IN
-        // for (let i = 0; i < seed.length; i++) {
-        //     let str='';
-        //     for (let j = 0; j < seed[i].length; j++) {
-        //        str+=seed[i][j].id+' ';
-        //     }
-        //     console.log(str);
-        // }
+        for (let i = 0; i < seed.length; i++) {
+            // let str='';
+            let row=[];
+            for (let j = 0; j < seed[i].length; j++) {
+            //    str+=seed[i][j].id+' ';
+                row.push(seed[i][j].id);
+            }
+            // console.log(str);
+            seed_value.push(row);
+        }
         //IN
 
         let thanhPhanToiTieu: number[]=[];
@@ -102,18 +122,20 @@ export class XacDinhBaiQuanHeThuTu{
             giaTriLonNhat.push(thanhPhanToiDai[0]);
         }
 
-        for (let i = 0; i < seed.length; i++) {
-            let row=[];
+        for (let i = 0; i < seed.length-1; i++) {
             for (let j = 0; j < seed[i].length; j++) {
-               row.push(seed[i][j].id);
+                seed[i][j].childs.forEach(e=>{
+                    hasse.push([seed[i][j].id,e.id]);
+                })
             }
-            hasse.push(row);
         }
 
-        return ChiTietTinhChatQuanHeThuTu(thanhPhanToiTieu,thanhPhanToiDai,giaTriLonNhat,giaTriNhoNhat,hasse);
+        let rs = new ChiTietTinhChatQuanHeThuTu(thanhPhanToiTieu,thanhPhanToiDai,giaTriLonNhat,giaTriNhoNhat,hasse);
+        rs.seed=seed_value;
+        return rs;
     }
-
-    DieuKien(){
+    
+    private DieuKien():ChiTietTinhChatQuanHeThuTu{
         if (this.R.dieuKien) {
             let condition: QuanHeDaiSo | null = this.R.dieuKien
             let newArr: number[][] = [];
@@ -131,8 +153,9 @@ export class XacDinhBaiQuanHeThuTu{
                 }
             }
             this.R = new QuanHeFactory().createQuanHeLietKe(this.Parent,newArr);
-            this.LietKe();
+            return this.LietKe();
         }
+        throw new Error('Day khong phai la dieu kien');
     }
 
     private khoiTaoMaTran():number[][]{
@@ -162,7 +185,8 @@ export class ChiTietTinhChatQuanHeThuTu {
     public thanhPhanToiDai: number[];
     public giaTriLonNhat: number[];
     public giaTriNhoNhat: number[];
-    public soDo:number[][]=[]
+    public soDo:number[][]=[];
+    public seed:number[][]=[];
  
     constructor(thanhPhanToiTieu: number[], thanhPhanToiDai: number[], giaTriLonNhat: number[], giaTriNhoNhat: number[],soDo:number[][]) {
         this.giaTriLonNhat = giaTriLonNhat;

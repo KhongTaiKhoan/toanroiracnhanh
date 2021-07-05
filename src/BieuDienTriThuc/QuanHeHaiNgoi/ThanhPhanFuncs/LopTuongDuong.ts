@@ -2,6 +2,7 @@ import { KhonGianSoNguyen } from '../../BieuThucDaiSoZ/ThanhPhanC/BieuThucDaiSo'
 import { QuanHe, QuanHeFactory } from '../ThanhPhanC/QuanHe';
 import { QuanHeDaiSo, ICheckerQuanHeDaiSo } from '../ThanhPhanC/QuanHeDaiSo';
 import { TapHop, TapHopBuilder } from '../ThanhPhanC/TapHop';
+import { PhanLoaiQuanHe } from './PhanLoaiQuanHe';
 export class XacDinhLopTuongDuong{
     private R:QuanHe;
     private Parent:TapHop;
@@ -13,12 +14,15 @@ export class XacDinhLopTuongDuong{
 
     /// XET TUNG TRUONG HOP
     public layLopTuongDuong():LopTuongDuong[]{
+        let x = PhanLoaiQuanHe.phanLoai(PhanLoaiQuanHe.TUONG_DUONG,this.R);
+        if(!x)throw new Error('Quan hệ không phải là quan hệ tương đương');
         if(this.R.khongGianMau.getKind() === TapHop.TAP_HOP_LIET_KE && this.R.getKind() === TapHop.TAP_HOP_LIET_KE){
             return this.LietKe_LietKe();
         }else if(this.R.khongGianMau.getKind() === TapHop.TAP_HOP_LIET_KE &&  this.R.getKind() === TapHop.TAP_HOP_DIEU_KIEN){
+           
              return this.LietKe_DieuKien(); 
         }else{
-           return  this.DieuKien_DieuKien();
+            return  this.DieuKien_DieuKien();
         }
     }
 

@@ -15,21 +15,22 @@ export class QuanHe extends TapHop{
         this._boKiemTra = new BoKiemTraTinhChatLietKe(this);
     }
 
-    public cacTinhChat(){
+    public cacTinhChat():TinhChatQuanHe[]{
         this.boKiemTra.generate();
         this.tinhChat = this.boKiemTra.check();
-        for (let i = 0; i < this.tinhChat.length; i++) {
-            if (this.tinhChat[i].active)
-                console.log(`${i + 1}. Quan hệ có ${this.tinhChat[i].name}. Vì: `);
-            else
-                console.log(`${i + 1}. Quan hệ không có ${this.tinhChat[i].name}. Vì: \n`);
+        // for (let i = 0; i < this.tinhChat.length; i++) {
+        //     if (this.tinhChat[i].active)
+        //         console.log(`${i + 1}. Quan hệ có ${this.tinhChat[i].name}. Vì: `);
+        //     else
+        //         console.log(`${i + 1}. Quan hệ không có ${this.tinhChat[i].name}. Vì: \n`);
                 
-            this.tinhChat[i].describe.forEach(e=>{
-                console.log(e);
-            })
+        //     this.tinhChat[i].describe.forEach(e=>{
+        //         console.log(e);
+        //     })
             
-            console.log();
-        }
+        //     console.log();
+        // }
+        return this.tinhChat;
     }
 
 
