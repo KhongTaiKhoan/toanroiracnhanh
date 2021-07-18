@@ -150,3 +150,13 @@ html {
 .cell-active{
   background-color: rgb(218, 158, 80);
 }
+
+#button-menu{
+z-index: 20;
+}
+#menu{
+   z-index: 10;
+   width: 300px;
+   transform: translate(0,38px);
+
+}

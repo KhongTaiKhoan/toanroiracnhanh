@@ -195,8 +195,18 @@ export  class Controller{
     //#endregion
 
     //#region  QUAN HE 2 NGOI
-    getQuanHe2Ngoi(req:express.Request,res:express.Response){
-        res.render('QuanHe2Ngoi.ejs');
+    getQuanHe2Ngoi(req: express.Request, res: express.Response) {
+        let rs = req.params.id;
+        let link = '';
+        if (rs === '1') {
+            link = '/tinh-chat-quan-he-2-ngoi';
+        } else if (rs === '2') {
+            link = '/quan-he-tuong-duong';
+        }
+        else {
+            link = '/quan-he-thu-tu';
+        }
+        res.render('QuanHe2Ngoi.ejs',{link:link});
     }
     tinhChatQuanHe2Ngoi(req:express.Request,res:express.Response){
         // console.log(req.body);
@@ -214,15 +224,17 @@ export  class Controller{
         if(req.body.typeR === '1'){
             let array:number[][] = [];
             let str:string[] = req.body.dataR.split(',');
-            for (let i = 0; i < str.length; i++) {
-                let s:string[] = str[i].split(',');
-                s[0] = s[0].substring(0,1);
-                s[1] = s[0].substring(s[0].length-1,1);
+            for (let i = 0; i < str.length/2; i++) {
+                let s:string[] = [];
+                s[0] = str[i*2].substring(1);
+                s[1] = str[i*2+1].substring(0,str[i*2+1].length-1);
+                // console.log(s[0] +','+s[1] );
                 let row:number[]=[];
                 row.push(parseInt(s[0]));
                 row.push(parseInt(s[1]));
                 array.push(row);
             }
+            // console.log(array);
             R = new QuanHeFactory().createQuanHeLietKe(A,array);
         }else{
             let str:string[]= req.body.dataR.split('@');
@@ -294,15 +306,17 @@ export  class Controller{
         if(req.body.typeR === '1'){
             let array:number[][] = [];
             let str:string[] = req.body.dataR.split(',');
-            for (let i = 0; i < str.length; i++) {
-                let s:string[] = str[i].split(',');
-                s[0] = s[0].substring(0,1);
-                s[1] = s[0].substring(s[0].length-1,1);
+            for (let i = 0; i < str.length/2; i++) {
+                let s:string[] = [];
+                s[0] = str[i*2].substring(1);
+                s[1] = str[i*2+1].substring(0,str[i*2+1].length-1);
+                // console.log(s[0] +','+s[1] );
                 let row:number[]=[];
                 row.push(parseInt(s[0]));
                 row.push(parseInt(s[1]));
                 array.push(row);
             }
+            // console.log(array);
             R = new QuanHeFactory().createQuanHeLietKe(A,array);
         }else{
             let str:string[]= req.body.dataR.split('@');
@@ -383,15 +397,17 @@ export  class Controller{
         if(req.body.typeR === '1'){
             let array:number[][] = [];
             let str:string[] = req.body.dataR.split(',');
-            for (let i = 0; i < str.length; i++) {
-                let s:string[] = str[i].split(',');
-                s[0] = s[0].substring(0,1);
-                s[1] = s[0].substring(s[0].length-1,1);
+            for (let i = 0; i < str.length/2; i++) {
+                let s:string[] = [];
+                s[0] = str[i*2].substring(1);
+                s[1] = str[i*2+1].substring(0,str[i*2+1].length-1);
+                // console.log(s[0] +','+s[1] );
                 let row:number[]=[];
                 row.push(parseInt(s[0]));
                 row.push(parseInt(s[1]));
                 array.push(row);
             }
+            // console.log(array);
             R = new QuanHeFactory().createQuanHeLietKe(A,array);
         }else{
             let str:string[]= req.body.dataR.split('@');

@@ -19,6 +19,8 @@
 
 <body>
 
+    <!-- MENU -->
+    <%-include('./menu.ejs')%>
     <!-- Begin page content -->
     <main role="main" class="container mt-2">
         <!-- DE BAI -->
@@ -26,7 +28,7 @@
             <h1 class="text-white text-center" id="label-de-bai">Giải toán nhanh</h1>
             <!-- DE BAI -->
             <div class="bg-white p-5">
-                <form>
+                <form method="POST">
                     <div class="form-group">
                         <label for="formGroupExampleInput">Không gian mẫu</label>
                         <!-- INPUT -->
@@ -117,7 +119,7 @@
 
                 <!-- BUTTON CONTROL -->
                 <div class='foot mt-3 text-center border-bottom pb-3'>
-                    <button type="button" id='nop' class="btn btn-success font-itim">Nộp</button>
+                    <a href="<%=link%>"  id='nop' class="btn btn-success font-itim">Nộp</a>
                     <button type="button" class="btn btn-danger font-itim ">Xóa</button>
                 </div>
                 <!-- END BUTTON CONTROL -->
@@ -151,6 +153,7 @@
 
 
         <script src="/js/DrawHasse.js"></script>
+        <script src="/js/Menu.js"></script>
     <script src="/js/quanhe2ngoi.js"></script>
 </body>
 

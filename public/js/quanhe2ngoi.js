@@ -43,8 +43,9 @@ $('#dk-R').change(function () {
 
 // --------------- NOP
 $('#nop').on('click', (e) => {
+    e.preventDefault();
     $('#chi-tiet-loi-giai').empty();
-
+    let href= $('#nop').attr('href');
     let dataA = '';
     let dataR = '';
 
@@ -60,10 +61,9 @@ $('#nop').on('click', (e) => {
     } else {
         dataR = $('#input-left-expr-R').val() + '@' + qhR + '@' + $('#input-right-expr-R').val()
     }
-
     $.ajax({
-        method: 'POST',
-        url: '/quan-he-thu-tu',
+        method: 'post',
+        url: href,
         data: {
             typeA: typeA,
             typeR: typeR,

@@ -9,7 +9,7 @@ router.get('/',controller.index);
 router.get('/suy-dien',controller.getSuyDien);
 router.get('/bang-chan-tri',controller.getBangChanTri);
 router.get('/rut-gon-ham-boolean',controller.getHamBoolean);
-router.get('/qh2ngoi',controller.getQuanHe2Ngoi);
+router.get('/qh2ngoi/:id',controller.getQuanHe2Ngoi);
 router.post('/nop-bai',controller.notBai);
 router.post('/suy-dien',controller.postSuyDien);
 router.post('/bang-chan-tri',controller.postBangChanTri);
