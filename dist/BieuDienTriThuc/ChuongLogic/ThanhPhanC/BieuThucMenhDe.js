@@ -20,7 +20,7 @@ class BieuThucMenhDe {
             return this.toanTu.toString() + "(" + this.bieuThucCons[0].id + ")";
         }
         if (Helper_1.Helper.IS_BIEU_THUC_SO_CAP(this)) {
-            return this._id;
+            return this.toanTu.toString() + this._id;
         }
         if (this.toanTu.tenToanTu === ToanTuLogic_1.ToanTu.TUONG_DUONG || this.toanTu.tenToanTu === ToanTuLogic_1.ToanTu.KEO_THEO) {
             let s = this.toanTu.toString();
@@ -83,7 +83,12 @@ class BieuThucMenhDe {
         this._id = value;
     }
     get chanTri() {
-        return this._chanTri;
+        if (Helper_1.Helper.IS_BIEU_THUC_SO_CAP(this)) {
+            if (this.toanTu.tenToanTu === ToanTuLogic_1.ToanTu.PHU_DINH)
+                return !this._chanTri;
+            return this._chanTri;
+        }
+        return this.toanTu.tinhToan(this);
     }
     set chanTri(value) {
         this._chanTri = value;

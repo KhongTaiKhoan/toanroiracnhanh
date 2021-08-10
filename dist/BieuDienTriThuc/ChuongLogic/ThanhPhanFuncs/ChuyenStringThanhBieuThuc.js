@@ -13,6 +13,8 @@ class ChuyenStringThanhBieuThuc {
         for (let i = 0; i < chuoi.length; i++) {
             if (chuoi[i] === ' ')
                 continue;
+            if (chuoi[i] === '\n' || chuoi[i] === '\r')
+                continue;
             else if (chuoi[i] === '1') {
                 let bt_con = Helper_1.Helper.BIEU_THUC_SO_CAP(BieuThucMenhDe_1.BieuThucMenhDe.MA_HANG_DUNG);
                 bt_con.cha = hienTai;
@@ -70,6 +72,8 @@ class ChuyenStringThanhBieuThuc {
                 }
             }
         }
+        if (!Helper_1.Helper.IS_BIEU_THUC_SO_CAP(hienTai) && hienTai.bieuThucCons.length === 1 && hienTai.toanTu.tenToanTu === ToanTuLogic_1.ToanTu.NONE)
+            return hienTai.bieuThucCons[0];
         return hienTai;
     }
 }

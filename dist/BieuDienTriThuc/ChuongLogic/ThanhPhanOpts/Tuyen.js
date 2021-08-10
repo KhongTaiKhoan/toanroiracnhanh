@@ -8,7 +8,11 @@ class Tuyen extends ToanTuLogic_1.ToanTu {
         this.tenToanTu = ToanTuLogic_1.ToanTu.TUYEN;
     }
     tinhToan(bieuThuc) {
-        throw new Error("Method not implemented.");
+        for (let i = 0; i < bieuThuc.bieuThucCons.length; i++) {
+            if (bieuThuc.bieuThucCons[i].chanTri === true)
+                return true;
+        }
+        return false;
     }
 }
 exports.Tuyen = Tuyen;

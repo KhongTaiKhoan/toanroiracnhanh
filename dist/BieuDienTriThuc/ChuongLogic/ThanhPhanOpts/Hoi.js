@@ -8,7 +8,11 @@ class Hoi extends ToanTuLogic_1.ToanTu {
         this.tenToanTu = ToanTuLogic_1.ToanTu.HOI;
     }
     tinhToan(bieuThuc) {
-        throw new Error("Method not implemented.");
+        for (let i = 0; i < bieuThuc.bieuThucCons.length; i++) {
+            if (bieuThuc.bieuThucCons[i].chanTri === false)
+                return false;
+        }
+        return true;
     }
 }
 exports.Hoi = Hoi;

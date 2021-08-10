@@ -33,7 +33,7 @@ class ToanTuFactory {
                         super("");
                     }
                     tinhToan(_bieuThuc) {
-                        return false;
+                        return _bieuThuc.chanTri;
                     }
                 }();
         }
@@ -61,7 +61,7 @@ class ToanTuFactory {
                         super("");
                     }
                     tinhToan(_bieuThuc) {
-                        return false;
+                        return _bieuThuc.chanTri;
                     }
                 }();
         }

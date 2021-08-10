@@ -8,7 +8,10 @@ class KeoTheo extends ToanTuLogic_1.ToanTu {
         this.tenToanTu = ToanTuLogic_1.ToanTu.KEO_THEO;
     }
     tinhToan(bieuThuc) {
-        return false;
+        // console.log(`- CT: ${bieuThuc.bieuThucCons[0].chanTri}   ${bieuThuc.bieuThucCons[1].chanTri}`)
+        if (bieuThuc.bieuThucCons[0].chanTri === true && bieuThuc.bieuThucCons[1].chanTri === false)
+            return false;
+        return true;
     }
 }
 exports.KeoTheo = KeoTheo;

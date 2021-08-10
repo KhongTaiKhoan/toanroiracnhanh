@@ -15,7 +15,6 @@ class Helper {
                     .build();
             }
             else {
-                // console.log(P.id)
                 return new BieuThucBuilder_1.BieuThucBuilder().addID(P.id.split('0')[1]).build();
             }
         }
@@ -28,6 +27,10 @@ class Helper {
     }
     static BIEU_THUC_SO_CAP(id, toanTu) {
         let rs = new BieuThucMenhDe_1.BieuThucMenhDe();
+        if (id.includes('0')) {
+            id = id.split('0')[1];
+            toanTu = new ToanTuFactory_1.ToanTuFactory().create(ToanTuLogic_1.ToanTu.PHU_DINH).tenToanTu;
+        }
         rs.id = id;
         if (toanTu !== undefined)
             rs.toanTu = new ToanTuFactory_1.ToanTuFactory().create(toanTu);
@@ -56,11 +59,11 @@ class Helper {
     }
     static SAO_CHEP(P) {
         if (this.IS_BIEU_THUC_SO_CAP(P))
-            return new BieuThucBuilder_1.BieuThucBuilder().addID(P.id).addToanTu(P.toanTu.tenToanTu).build();
+            return this.BIEU_THUC_SO_CAP(P.id);
         let rs = new BieuThucMenhDe_1.BieuThucMenhDe();
-        rs.bieuThucCons = P.bieuThucCons;
-        for (let i = 0; i < rs.bieuThucCons.length; i++) {
-            rs.bieuThucCons[i] = this.SAO_CHEP(P.bieuThucCons[i]);
+        rs.bieuThucCons = [];
+        for (let i = 0; i < P.bieuThucCons.length; i++) {
+            rs.bieuThucCons.push(this.SAO_CHEP(P.bieuThucCons[i]));
         }
         rs.toanTu = P.toanTu;
         return rs;
@@ -99,9 +102,23 @@ class Helper {
         builder.addCha(P.cha);
         return builder.build();
     }
+    static DE_MORGAN(P) {
+        if (Helper.IS_BIEU_THUC_SO_CAP(P))
+            return P;
+        let tt = P.bieuThucCons[0].toanTu.tenToanTu === ToanTuLogic_1.ToanTu.HOI ? new ToanTuFactory_1.ToanTuFactory().create(ToanTuLogic_1.ToanTu.TUYEN) : new ToanTuFactory_1.ToanTuFactory().create(ToanTuLogic_1.ToanTu.HOI);
+        let builder = new BieuThucBuilder_1.BieuThucBuilder().addToanTu(tt.tenToanTu);
+        for (let i = 0; i < P.bieuThucCons[0].bieuThucCons.length; i++) {
+            // console.log(P.bieuThucCons[0].bieuThucCons[i].id)
+            let bl = Helper.PHU_DINH_MENH_DE(P.bieuThucCons[0].bieuThucCons[i]);
+            builder.addBieuThucCon(bl);
+        }
+        builder.addCha(P.cha);
+        return builder.build();
+    }
     static IN(P) {
         if (Helper.IS_BIEU_THUC_SO_CAP(P)) {
             if (P.toanTu.tenToanTu == ToanTuLogic_1.ToanTu.PHU_DINH) {
+                // console.log('cai lon gi the')
                 return P.toanTu.kyHieu + `${P.id.split('0')[1]}`;
             }
             else {
@@ -111,7 +128,8 @@ class Helper {
             }
         }
         if (P.toanTu.tenToanTu == ToanTuLogic_1.ToanTu.PHU_DINH) {
-            return P.toanTu.kyHieu + `( ${this.IN(P.bieuThucCons[0])} )`;
+            // console.log(this.IN(P.bieuThucCons[0] ))
+            return P.toanTu.kyHieu + `(${this.IN(P.bieuThucCons[0])})`;
         }
         let str = '';
         if (!Helper.IS_BIEU_THUC_SO_CAP(P.bieuThucCons[0]))

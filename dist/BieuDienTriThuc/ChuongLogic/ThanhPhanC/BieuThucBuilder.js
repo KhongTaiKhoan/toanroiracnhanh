@@ -37,14 +37,26 @@ class BieuThucBuilder {
     }
     build() {
         if (Helper_1.Helper.IS_BIEU_THUC_SO_CAP(this.bieuThuc)) {
-            let bt = Helper_1.Helper.BIEU_THUC_SO_CAP(this.bieuThuc.id);
-            // bt.toanTu = this.bieuThuc.toanTu;
+            let bt = new BieuThucMenhDe_1.BieuThucMenhDe();
+            if (this.bieuThuc.id.includes('0') || this.bieuThuc.toanTu.tenToanTu === ToanTuLogic_1.ToanTu.PHU_DINH) {
+                bt = Helper_1.Helper.BIEU_THUC_SO_CAP(this.bieuThuc.id.split('0')[1]);
+                bt.toanTu = new ToanTuFactory_1.ToanTuFactory().create(ToanTuLogic_1.ToanTu.PHU_DINH);
+            }
+            else {
+                bt = Helper_1.Helper.BIEU_THUC_SO_CAP(this.bieuThuc.id);
+                // bt.toanTu = this.bieuThuc.toanTu;
+            }
             bt.cha = this.bieuThuc.cha;
             return bt;
         }
-        if (this.bieuThuc.toanTu.tenToanTu !== ToanTuLogic_1.ToanTu.PHU_DINH && this.bieuThuc.bieuThucCons.length === 1) {
-            let bt = Helper_1.Helper.BIEU_THUC_SO_CAP(this.bieuThuc.bieuThucCons[0].id);
+        if (this.bieuThuc.bieuThucCons.length === 1 && Helper_1.Helper.IS_BIEU_THUC_SO_CAP(this.bieuThuc.bieuThucCons[0])) {
+            let bt = new BieuThucMenhDe_1.BieuThucMenhDe();
+            if (this.bieuThuc.id.includes('0') || this.bieuThuc.toanTu.tenToanTu === ToanTuLogic_1.ToanTu.PHU_DINH)
+                bt = Helper_1.Helper.BIEU_THUC_SO_CAP(this.bieuThuc.bieuThucCons[0].id.split('0')[1]);
+            else
+                bt = Helper_1.Helper.BIEU_THUC_SO_CAP(this.bieuThuc.bieuThucCons[0].id);
             bt.cha = this.bieuThuc.cha;
+            // console.log('nani')
             return bt;
         }
         return this.bieuThuc;

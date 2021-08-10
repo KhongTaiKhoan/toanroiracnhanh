@@ -11,12 +11,12 @@ class RutGonBieuThuc extends BaiTap_1.BaiTap {
         this.root = new BieuThucMenhDe_1.BieuThucMenhDe();
         this.truyVet = [];
         this.loiGia = new LoiGiaiChuyenDoi_1.LoiGiaiChuyenDoi();
-        this.root = root;
+        this.root = Helper_1.Helper.SAO_CHEP(root);
     }
     giai() {
+        // console.log(this.root.id);
         this.root = this.rutGon(this.root, null, -1);
-        this.loiGia.ketQua = this.root;
-        // console.log(this.loiGia.loiGiai[0]);
+        this.loiGia.ketQua = Helper_1.Helper.SAO_CHEP(this.root);
         return this.loiGia;
     }
     rutGon(P, cha, id_con) {

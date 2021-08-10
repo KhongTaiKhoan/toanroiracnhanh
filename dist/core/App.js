@@ -14,15 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const express_1 = __importDefault(require("express"));
-const MenhDeTuongDuong_1 = require("../BieuDienTriThuc/BaiTap/BaiTap_Logic/MenhDeTuongDuong");
 const body_parser_1 = require("body-parser");
 const path_1 = __importDefault(require("path"));
 const Routing_1 = __importDefault(require("../routers/Routing"));
 class App {
+    // private bai: BaiTap;
     constructor(port) {
         this.app = express_1.default();
         this.port = port;
-        this.bai = new MenhDeTuongDuong_1.MenhDeTuongDuong('');
+        // this.bai = new MenhDeTuongDuong().gia;
     }
     run() {
         return __awaiter(this, void 0, void 0, function* () {
