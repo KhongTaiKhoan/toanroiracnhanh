@@ -1,7 +1,7 @@
 import { Expression } from '../ThanhPhanC/Expression';
 
 export abstract class Operator{
-    public static  symbols:string[] = ['\u00AC','\u2194','\u2192','\u2228','\u2227'] ;
+    public static  symbols:string[] = ['\u00AC','\u2194','\u2192','\u2227','\u2228'] ;
     
     protected id_:number=Operts.Type.NONE;
     protected _symbol: string = '';
@@ -37,7 +37,7 @@ export namespace Operts {
         HOI         = 1,
         TUYEN       = 2,
         KEO_THEO    = 3,
-        TUONG_DUONG = 4
+        TUONG_DUONG = 4,
     }
 
     export class PhuDinh extends Operator {

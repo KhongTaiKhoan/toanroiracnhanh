@@ -25,14 +25,36 @@ export class Expression{
         }
         return expr;
     }
+    
 
-    private refeshId(){
-        if(this.operator.id === Operts.Type.PHU_DINH){
-            if(ExpressionHelper.Helper.isPrimeOrConstant(this)) return  this.operator.toString()+this._id;        
-            return   this.operator.toString()+"("+this.childs[0].id+")";
+    public refeshPrime(){
+        let prime_ids: string[] = [];
+        let str_id = this.id;
+        for (let i = 0; i < str_id.length; i++) {
+            let n = str_id.charCodeAt(i);
+            let strStartsWithALetter = (n >= 65 && n < 91) || (n >= 97 && n < 123);
+            if (strStartsWithALetter) {
+                if (!prime_ids.includes(str_id[i])) {
+                    prime_ids.push(str_id[i]);
+                }
+            }
         }
+        this._primes=[];
+        for (let i = 0; i < prime_ids.length; i++) {
+            this._primes.push(ExpressionHelper.Helper.createPrime(prime_ids[i]));
+        }
+    }
+    public refeshId(){
         if(ExpressionHelper.Helper.isPrimeOrConstant(this)){
-            return  this.operator.toString()+this._id;        
+            return;       
+        }
+        if(this.operator.id === Operts.Type.PHU_DINH){
+            if(ExpressionHelper.Helper.isPrimeOrConstant(this.childs[0])) {
+                this._id = this.operator.toString()+this.childs[0]._id;    
+                return;
+            }
+            this._id = this.operator.toString()+"("+this.childs[0].id+")";
+            return;
         }
 
         if(this.operator.id === Operts.Type.TUONG_DUONG || this.operator.id === Operts.Type.KEO_THEO ){
@@ -43,17 +65,22 @@ export class Expression{
             if(ExpressionHelper.Helper.isPrimeOrConstant(this.childs[1]))
                 s+= this.childs[1].id;
             else     s+= `(${this.childs[1].id})`;
-            return s;
+            this._id= s;
         }
 
-        
+        /// SAP XEP THEO QUY TAC CAC BIEU THUC PHU DINH DUOC UU TIEN
+        /// CHU CAI THEO THU TU APLHABET        
 
         let str:string []=[];
         let str_2:string = '';
-        for(let i:number = 0;i<this.childs.length;i++){
-            if(!ExpressionHelper.Helper.isPrimeOrConstant(this.childs[i]))
-              str_2+=`(${this.childs[i].id})`
+        for (let i: number = 0; i < this.childs.length; i++) {
+            if (!ExpressionHelper.Helper.isPrimeOrConstant(this.childs[i])
+            &&!(this.childs[i].operator.id === Operts.Type.PHU_DINH && ExpressionHelper.Helper.isPrimeOrConstant(this.childs[i].childs[0]))
+            ) {
+                    str_2 += `(${this.childs[i].id})`;
+            }
             else{
+                /// DUYET CAC BIEU THUC MENH DE VA SAP XEP LAI CHUNG
                 if(str.length === 0)
                    str.push( this.childs[i].id); 
                 else{
@@ -94,7 +121,7 @@ export class Expression{
             s+= str[i]; 
         }  
 
-        this.id = this.operator.toString() +s + str_2;  
+        this._id = this.operator.toString() +s + str_2;  
     }
     type():number{
         /// HANG
@@ -110,12 +137,25 @@ export class Expression{
     }
     setChildAt(index:number,expr:Expression){
         this.childs[index] = expr;
-        this.refeshId();
+        this.childs[index].parent = this;
     }
-   
+    addChild(expr:Expression){
+       this.childs.push(expr);
+       this.childs[this.childs.length-1].parent=this;
+    }
+    removeAt(index:number){
+       this.childs.splice(index,1);
+       if(this.childs.length===0)this.operator = new OperatorFactory().create(Operts.Type.NONE);
+    } 
+    removeChild(exp:Expression){
+        let index:number = this.childs.findIndex(e=>{return e.id === exp.id});
+        this.childs.splice(index,1);
+        if(this.childs.length===0)this.operator = new OperatorFactory().create(Operts.Type.NONE);
+
+    }
     //#region  GETTER AND SETTER
     public get id(): string {
-        if(this._id === '')
+       
         this.refeshId();
         return this._id;
     }
@@ -124,7 +164,7 @@ export class Expression{
         this.refeshId();
     }
     public get value(): boolean | null {
-        if(this.value === null) 
+        if(this._value === null) 
         throw Error ('CHUA DAT CHAN TRI');
         return this._value;
     }
@@ -144,6 +184,9 @@ export class Expression{
         this._childs = value;
     }
     public get primes(): Expression[] {
+        
+        this.refeshPrime();   
+        
         return this._primes;
     }
     public set primes(value: Expression[]) {
@@ -172,6 +215,10 @@ export class ExpressionBuilder{
         this.expr = new Expression();
     }
     addChild(child:Expression):ExpressionBuilder{
+        this.expr.addChild(child);
+        return this;
+    }
+    addChild2(child:Expression):ExpressionBuilder{
         this.expr.childs.push(child);
         return this;
     }

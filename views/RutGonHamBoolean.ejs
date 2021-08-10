@@ -18,76 +18,82 @@
 </head>
 
 <body>
-
-  <!-- Begin page content -->
-  <main role="main" class="container mt-2">
-    <!-- DE BAI -->
-    <div class="form-group content mx-auto mb-2">
+  <!-- MENU -->
+  <%-include('./menu.ejs')%>
+    <!-- Begin page content -->
+    <main role="main" class="container mt-2">
       <!-- DE BAI -->
-      <h1 class="text-white text-center" id="label-de-bai">Giải toán nhanh</h1>
-      <!-- NUT TOAN TU -->
-      <div class='d-inline-block bg-white '>
-        <%for(let i=0;i<toanTus.length;i++){%>
-          <div class="font-itim text-black toan-tu">
-            <%=toanTus[i]%>
-          </div>
-          <%}%>
-      </div>
+      <div class="form-group content mx-auto mb-2">
+        <!-- DE BAI -->
+        <h1 class="text-white text-center" id="label-de-bai">Giải toán nhanh</h1>
+        <!-- NUT TOAN TU -->
+        <div class='d-inline-block bg-white '>
+          <%for(let i=0;i<toanTus.length;i++){%>
+            <div class="font-itim text-black toan-tu">
+              <%=toanTus[i]%>
+            </div>
+            <%}%>
+        </div>
 
-      <div  class="ket-luan position-relative d-flex mb-1 mt-1">
-        <div id='text-ket-luan'>Nhập hàm:</div>
-        <div id='noi-dung' contenteditable="true" class="menh-de noi-dung-ket-luan"></div>
-      </div>
+        <div class="ket-luan position-relative d-flex mb-1 mt-1">
+          <div id='text-ket-luan'>Nhập hàm:</div>
+          <div id='noi-dung' contenteditable="true" class="menh-de noi-dung-ket-luan"></div>
+        </div>
 
-      <div  class="ket-luan position-relative d-flex mb-1" >
-        <div id='text-ket-luan'>Hoặc chuỗi số:</div>
-        <div id='chuoi-input' contenteditable="true" class="menh-de noi-dung-ket-luan"></div>
-      </div>
+        <div class="ket-luan position-relative d-flex mb-1">
+          <div id='text-ket-luan'>Hoặc chuỗi số:</div>
+          <div id='chuoi-input' contenteditable="true" class="menh-de noi-dung-ket-luan"></div>
+        </div>
 
-      <div class="ket-luan position-relative d-flex">
-        <div id='text-ket-luan'>Số lượng biến:</div>
-        <div id='so-luong-bien'  contenteditable="true" class="menh-de noi-dung-ket-luan"></div>
-      </div>
+        <div class="ket-luan position-relative d-flex">
+          <div id='text-ket-luan'>Số lượng biến:</div>
+          <div id='so-luong-bien' contenteditable="true" class="menh-de noi-dung-ket-luan"></div>
+        </div>
 
-      <!-- CAC NUOT CONTROL -->
-      <div class='foot mt-2 text-center'>
-        <button type="button" id='nop' class="btn btn-success font-itim">Nộp</button>
-        <button type="button" class="btn btn-danger  font-itim">Xóa</button>
-      </div>
+        <!-- CAC NUOT CONTROL -->
+        <div class='foot mt-2 text-center'>
+          <button type="button" id='nop' class="btn btn-success font-itim">Nộp</button>
+          <button type="button" class="btn btn-danger  font-itim">Xóa</button>
+        </div>
 
 
-      <div class="form-group border-bottom">
-        <input type="range" value=".2" max="6" step="0.2" min=".15" name="toc-do" id="toc-do"
-          style="background-color: white;">
-      </div>
-    </div>
-
-    <!-- LOI GIAI BAI TAP -->
-    <div class="bai-giai d-none">
-      <h3 class="text-white text-center" id="label-de-bai">Giải:</h3>
-      <div class="tien-de-giai">
-        <!-- Đề bài được biển diễn lại như sau: -->
-        <div id='chi-tiet-loi-giai'>
-          <!-- LOI GIAI -->
+        <div class="form-group border-bottom">
+          <input type="range" value=".2" max="6" step="0.2" min=".15" name="toc-do" id="toc-do"
+            style="background-color: white;">
         </div>
       </div>
 
-    </div>
-  </main>
-  <!-- END CONTENT -->
+      <!-- LOI GIAI BAI TAP -->
+      <div class="bai-giai d-none">
+        <h3 class="text-white text-center" id="label-de-bai">Giải:</h3>
+        <div class="tien-de-giai">
+          <!-- Đề bài được biển diễn lại như sau: -->
+          <div id='chi-tiet-loi-giai'>
+            <!-- LOI GIAI -->
+          </div>
+        </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container  text-center">
-      <span class="text-white font-italic">Website đang được xây dựng bởi Khonng Nho Ten</span>
-    </div>
-  </footer>
-  <!-- END FOOTER -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      </div>
+    </main>
+    <!-- END CONTENT -->
 
-  <script src="/js/RutGonHamBoolean.js"></script>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container  text-center">
+        <span class="text-white font-italic">Website đang được xây dựng bởi Khonng Nho Ten</span>
+      </div>
+    </footer>
+    <!-- END FOOTER -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+
+    <script src="/js/RutGonHamBoolean.js"></script>
 </body>
 
 </html>
