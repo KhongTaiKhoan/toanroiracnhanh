@@ -41,9 +41,7 @@ $('#noi-dung').on('keyup',e=>{
 })
 
 $('#nop').on('click', e => {
-    $('.bai-giai').removeClass('d-none');
     $('#chi-tiet-loi-giai').html('');
-    console.log(menhDeGoc);
     $.ajax({
         method: "POST",
         url: '/nop-bai',
@@ -65,6 +63,8 @@ $('#nop').on('click', e => {
              );
             inKetQua(0,loiGiai.length,$('#toc-do').val() * 1000,loiGiai);
 
+        }else{
+            $('#chi-tiet-loi-giai').append('<div class="loi-giai-row font-itim tien-de-giai mb-0">Không thể chứng minh</div>')    
         }
 
     })
@@ -82,7 +82,7 @@ function inKetQua(i,length,time,loiGiai){
         // console.log(loiGiai[i]);
         $('#chi-tiet-loi-giai').append(
             `<div class="loi-giai-row font-itim tien-de-giai"> 
-                <div><span>\u2261 ${loiGiai[i].btGoc}       (Áp dụng ${loiGiai[i].luat})</span></div>
+                <div><span>\u2261 ${loiGiai[i].exp}     ${loiGiai[i].rule}</span></div>
              </div>`
          );
         let t = $('#toc-do').val() * 1000 ;

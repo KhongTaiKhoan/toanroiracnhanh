@@ -26,7 +26,7 @@ class Operator {
     }
 }
 exports.Operator = Operator;
-Operator.symbols = ['\u00AC', '\u2194', '\u2192', '\u2227', '\u2228'];
+Operator.symbols = ['¬', '\u2261', '→', '∧', '∨'];
 var Operts;
 (function (Operts) {
     let Type;
@@ -115,19 +115,19 @@ class OperatorFactory {
     }
     create2(loaiToanTu) {
         switch (loaiToanTu) {
-            case '\u00AC':
+            case '¬':
                 return new Operts.PhuDinh();
                 break;
-            case '\u2194':
+            case '\u2261':
                 return new Operts.TuongDuong();
                 break;
-            case '\u2192':
+            case '→':
                 return new Operts.KeoTheo();
                 break;
-            case '\u2227':
+            case '∧':
                 return new Operts.PhepHoi();
                 break;
-            case '\u2228':
+            case '∨':
                 return new Operts.PhepTuyen();
                 break;
             default:

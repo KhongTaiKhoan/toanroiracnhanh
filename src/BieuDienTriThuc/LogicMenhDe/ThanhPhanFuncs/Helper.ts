@@ -69,10 +69,61 @@ export namespace ExpressionHelper {
             for (let i = 0; i < sizeChilds; i++) {
                 // console.log(expr.childs[i].id);
                 let index:number=parent.childs.findIndex(e=>{return e.id === expr.childs[i].id;});
-                if(index===-1)return false; 
+                if(index===-1){
+                    return false; 
+                }
                 parent.removeAt(index);         
             }
             return true;
+        }
+        static contain2(expr:Expression,parent:Expression):number[]{
+            if(expr.operator.id !== parent.operator.id)return [];
+            if(this.Length(expr) > this.Length(parent)) return [];
+            expr = this.copy(expr);
+            parent = this.copy(parent);
+            let result=[];
+            let sizeChilds:number = expr.childs.length;
+            for (let i = 0; i < sizeChilds; i++) {
+                let index:number=parent.childs.findIndex(e=>{return e.id === expr.childs[i].id;});
+                if(index===-1){
+                    if(ExpressionHelper.Helper.laTuDon( expr.childs[i]))return [];
+                    let flag=false;
+                    for (let j = 0; j < parent.childs.length && !flag; j++) {
+                        if(ExpressionHelper.Helper.laTuDon( parent.childs[i]))continue;
+                        for (let z = 0; z < parent.childs[j].childs.length; z++) {
+                            if(expr.childs[i].id === parent.childs[j].childs[z].id){
+                                flag = true;
+                                result.push(j);
+                                break;
+                            }
+                        }
+                    } 
+                    if(!flag){
+                        flag = true;                       
+                        for (let j = 0; j < parent.childs.length; j++) {
+                            let s = parent.childs[i];
+                            if (this.isPrimeOrConstant(s)) continue;
+                            for (let z = 0; z < s.childs.length; z++){
+                                if (!ExpressionHelper.Helper.laTuDon(s.childs[z])) {
+                                    flag = false;
+                                    break;
+                                }
+                            }
+                            if (!flag) break;
+                            if (s.id.includes(expr.childs[i].id)) {
+                                result.push(j);
+                                flag =true;
+                                break;
+                            }
+                            flag = false;
+                        }
+                        if(!flag)
+                        return [];
+                    }
+                }else
+                result.push(index);
+            }
+            return result;
         }
         static not(expr:Expression){
             if(expr.operator.id === Operts.Type.PHU_DINH)
@@ -81,8 +132,9 @@ export namespace ExpressionHelper {
         }
         static Length(P:Expression):number{
             if(Helper.isPrimeOrConstant(P)){
-                if(P.operator.id !== Operts.Type.PHU_DINH)
-                   return 0;
+                if(P.operator.id !== Operts.Type.PHU_DINH){
+                    return 0;
+                }
                 else return 0.5;
             }
             let rs:number = 0;
@@ -99,29 +151,30 @@ export namespace ExpressionHelper {
     
             if(P.operator.id === Operts.Type.KEO_THEO)
               rs+=2;
+            // if(P.id.includes('1')||P.id.includes('0'))rs-=0.5;  
+            for (let i = 0; i < P.childs.length; i++) {
+                if(P.childs[i].id === '1' || P.childs[i].id === '0')rs-=0.5;
+            }
             return rs;
         }
          
-        static DOI_NGAU(exp:Expression):Expression{
-            if(this.isPrimeOrConstant(exp))return this.not(exp);
+        static DOI_NGAU(exp:Expression):Expression|null{
+            if(this.laTuDon(exp))return null;
             let builder = new ExpressionBuilder();
             if(exp.operator.id !== Operts.Type.PHU_DINH){
-                builder.addOperator(Operts.Type.PHU_DINH);
-                let b=new ExpressionBuilder();
                 for (let i = 0; i < exp.childs.length; i++) {
-                    b.addChild(this.not(exp.childs[i]));
+                    builder.addChild(this.not(exp.childs[i]));
                 }  
                 builder.addOperator(exp.operator.id === Operts.Type.HOI ?
                     Operts.Type.TUYEN : Operts.Type.HOI);
-                builder.addChild(b.build());
-                return builder.build();
+                return this.checkAndChangeToPrime(builder.build());
             }
-            for (let i = 0; i < exp.childs.length; i++) {
-                builder.addChild(this.not(exp.childs[i]));
+            for (let i = 0; i < exp.childs[0].childs.length; i++) {
+                builder.addChild(this.not(exp.childs[0].childs[i]));
             }  
             builder.addOperator(exp.childs[0].operator.id === Operts.Type.HOI ?
                 Operts.Type.TUYEN : Operts.Type.HOI);
-            return builder.build();        
+            return this.checkAndChangeToPrime(builder.build());
         }
         static isLetter(str:string):boolean{
             let n = str.charCodeAt(0);
@@ -135,6 +188,11 @@ export namespace ExpressionHelper {
                 return exp;
             }
             return exp;
+        }
+        static laTuDon(exp:Expression){
+            return ExpressionHelper.Helper.isPrimeOrConstant(exp) ||
+            (exp.operator.id === Operts.Type.PHU_DINH 
+            && ExpressionHelper.Helper.isPrimeOrConstant(exp.childs[0]));
         }
 
     }

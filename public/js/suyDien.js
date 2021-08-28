@@ -43,7 +43,6 @@ $('#nop').on('click', e => {
 
     let stringDeBai = [];
     let deBais = document.getElementsByClassName('noi-dung');
-    $('.bai-giai').removeClass('d-none');
     $('#chi-tiet-loi-giai').html('');
     $('#mo-ta-de-bai').html('');
     for (let i = 0; i < deBais.length; i++) {
@@ -63,6 +62,8 @@ $('#nop').on('click', e => {
         }
     }).done(rs=>{
         if(rs.msg === true){
+            $('.bai-giai').removeClass('d-none');
+
             let datas=[];
             datas = rs.data;
             inKetQua(0,datas.length,.2,datas)

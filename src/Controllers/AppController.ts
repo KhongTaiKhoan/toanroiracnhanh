@@ -18,6 +18,10 @@ import { HauTo } from '../BieuDienTriThuc/BieuThucDaiSoZ/ThanhPhanFuncs/HauTo';
 import { TinhChatQuanHe } from '../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanRules/TinhChatQuanHe';
 import { LopTuongDuong, XacDinhLopTuongDuong } from '../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanFuncs/LopTuongDuong';
 import { XacDinhBaiQuanHeThuTu, ChiTietTinhChatQuanHeThuTu } from '../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanFuncs/GiaiBaiQuanHeThuTu';
+import { Reasoning, Deduction } from '../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/Deduction';
+import { ExpressionToString } from '../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/ExpressionToString';
+import { Simplify } from '../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/Simplify';
+import { Equivalence } from '../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/Equivalence';
 
 export  class Controller{
     public index(req:express.Request,res:express.Response){
@@ -34,26 +38,26 @@ export  class Controller{
 
     public notBai(req:express.Request,res:express.Response){
         let deBai:string  =   req.body.noidung;
-
-        console.log(deBai);
-
         deBai= deBai.replace(new RegExp('TRUE','g'),'1');
         deBai= deBai.replace(new RegExp('FALSE','g'),'0');
-        let bai:MenhDeTuongDuong = new MenhDeTuongDuong();
-        let lg:LoiGiaiMenhDeTuongDuong[]|null=  bai.giai(deBai);
-
-
-
-        if (lg === null || lg === []) {
-
+        // let bai:MenhDeTuongDuong = new MenhDeTuongDuong();
+        // let lg:LoiGiaiMenhDeTuongDuong[]|null=  bai.giai(deBai);
+        let trans = new Equivalence().giai(deBai);  
+        if (trans === null) {
             res.send(
                 {
                     complete: false
                 });
         } else {
-            let VT = Helper.IN(bai.vt_clone);
-            let VP = Helper.IN(bai.vp_clone);
-            let loiGiai = lg;
+            let split:string[] = deBai.split('\u2261');
+            let VT = split[0];
+            let VP = split[1];
+            let loiGiai:{exp:string,rule:string}[] =[] ;
+            trans.forEach(e=>{
+                let str = {exp:`${ExpressionToString(e.Exp())}` , rule:`(${e.rule.name})`};
+                // console.log(str);
+                loiGiai.push(str);
+            });
             res.send({
                 complete: true,
                 loiGiai: loiGiai,
@@ -77,46 +81,56 @@ export  class Controller{
     }
 
     public postSuyDien(req:express.Request,res:express.Response){
-        let bai:SuyDien.SuyDienLoGic = new SuyDien.SuyDienLoGic();
-
         let deBai:string[] = req.body['deBai[]'];
-        let giaThiet:BieuThucMenhDe= new BieuThucMenhDe();
-        let ketLuan:BieuThucMenhDe = new BieuThucMenhDe();
+        // let giaThiet:BieuThucMenhDe= new BieuThucMenhDe();
+        // let ketLuan:BieuThucMenhDe = new BieuThucMenhDe();
 
-        ketLuan = ChuyenStringThanhBieuThuc.chuyenDoi(deBai[deBai.length-1]);
-        deBai.pop();
-        for(let i=0;i<deBai.length;i++){
-            giaThiet.bieuThucCons.push(ChuyenStringThanhBieuThuc.chuyenDoi(deBai[i]));
-        }
-        giaThiet.toanTu = new ToanTuFactory().create(ToanTu.HOI);
-        bai.xayDungDeBai(giaThiet,ketLuan);
+        // ketLuan = ChuyenStringThanhBieuThuc.chuyenDoi(deBai[deBai.length-1]);
+        // deBai.pop();
+        // for(let i=0;i<deBai.length;i++){
+        //     giaThiet.bieuThucCons.push(ChuyenStringThanhBieuThuc.chuyenDoi(deBai[i]));
+        // }
+        // giaThiet.toanTu = new ToanTuFactory().create(ToanTu.HOI);
+        // bai.xayDungDeBai(giaThiet,ketLuan);
 
-       let loiGiai:LoiGiaiSuyDien[]|null = bai.giai();
-       if(loiGiai === null){
+        let KL = deBai[deBai.length-1];
+        let GT = deBai.slice(0,deBai.length-1);
+        // console.log(GT);
+    //    let loiGiai:LoiGiaiSuyDien[]|null = bai.giai();
+       let reasoning = new Deduction(GT,KL).giai();
+       if(reasoning.length === 0){
            res.send({msg:false});
        } 
        else{
            let chiTiet: string[][] = [];
-           loiGiai.forEach(e => {
-               let left = `${e.index}. ${Helper.IN(e.bieuThucKetQua)}`;
-               let right = '';
-               if (e.target[0] === -1) right = '(GIẢ THIẾT)';
-               else {
-                   right = `Áp dụng ${e.luat} cho `;
-                   for (let i = 0; i < e.target.length; i++) {
-                       right += `(${e.target[i]}), `
-                   }
-                   right = right.substr(0, right.length - 2);
-               }
-               chiTiet.push([left, right]);
+        //    loiGiai.forEach(e => {
+        //        let left = `${e.index}. ${Helper.IN(e.bieuThucKetQua)}`;
+        //        let right = '';
+        //        if (e.target[0] === -1) right = '(GIẢ THIẾT)';
+        //        else {
+        //            right = `Áp dụng ${e.luat} cho `;
+        //            for (let i = 0; i < e.target.length; i++) {
+        //                right += `(${e.target[i]}), `
+        //            }
+        //            right = right.substr(0, right.length - 2);
+        //        }
+        //        chiTiet.push([left, right]);
+        //    })
 
-               
-           })
-        //    console.log(chiTiet);
+           reasoning.forEach(e => {
+               let str:string[]=[];
+               str[0] = `${e.id}. ${ExpressionToString(e.exp)} `;
+               if (e.parent.length !== 0)
+                   str[1]= `( ${e.rule.name} ${e.parent})`;
+               else str[1]= '(GIA THIET)';
+               console.log(GT);
+               chiTiet.push(str);
+           });
+
            res.send({
-            msg:true,
-            data:chiTiet
-         });
+               msg: true,
+               data: chiTiet
+           });
        }
 
     }
@@ -174,10 +188,11 @@ export  class Controller{
             ketQuaRutGonHamBoolean.bienCoSo.forEach(e=>{bienCoSo.push(Helper.IN(e)); });
 
             let bieuThucLonChuyenDoi:string[]=[];
-            ketQuaRutGonHamBoolean.bieuThucLonChuyenDoi.forEach(e=>{bieuThucLonChuyenDoi.push(Helper.IN(e))});
+            ketQuaRutGonHamBoolean.bieuThucLonChuyenDoi.forEach(e=>{
+                bieuThucLonChuyenDoi.push(Helper.IN(e))});
 
             let bieuThucChuyenDoi:string[]=[];
-            ketQuaRutGonHamBoolean.bieuThucChuyenDoi.forEach(e=>{bieuThucChuyenDoi.push(Helper.IN(e))});
+            ketQuaRutGonHamBoolean.bieuThucChuyenDoi.forEach( e=>{ bieuThucChuyenDoi.push(Helper.IN(e))});
             res.send({
                 mes: true,
                 deBai: Helper.IN(ketQuaRutGonHamBoolean.deBai),

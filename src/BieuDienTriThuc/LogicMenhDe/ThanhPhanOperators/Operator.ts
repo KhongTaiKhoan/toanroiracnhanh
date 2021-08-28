@@ -1,7 +1,7 @@
 import { Expression } from '../ThanhPhanC/Expression';
 
 export abstract class Operator{
-    public static  symbols:string[] = ['\u00AC','\u2194','\u2192','\u2227','\u2228'] ;
+    public static  symbols:string[] = ['¬','\u2261','→','∧','∨'] ;
     
     protected id_:number=Operts.Type.NONE;
     protected _symbol: string = '';
@@ -116,23 +116,23 @@ export class OperatorFactory{
     }
     create2(loaiToanTu: string) {
         switch (loaiToanTu) {
-            case '\u00AC':
+            case '¬':
                 return new Operts.PhuDinh();
                 break;
 
-            case '\u2194':
+            case '\u2261':
                 return new Operts.TuongDuong();
                 break;
 
-            case '\u2192':
+            case '→':
                 return new Operts.KeoTheo();
                 break;
 
-            case '\u2227':
+            case '∧':
                 return new Operts.PhepHoi();
                 break;
 
-            case '\u2228':
+            case '∨':
                 return new Operts.PhepTuyen();
                 break;
                 

@@ -19,7 +19,7 @@ function ExpressionToString(P) {
     let str = '';
     for (let i = 0; i < P.childs.length; i++) {
         if (Helper_1.ExpressionHelper.Helper.isPrimeOrConstant(P.childs[i]))
-            str += P.childs[i].id;
+            str += ExpressionToString(P.childs[i]);
         else if ((P.childs[i].operator.id === Operator_1.Operts.Type.PHU_DINH))
             str += `${ExpressionToString(P.childs[i])}`;
         else

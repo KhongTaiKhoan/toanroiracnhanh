@@ -314,13 +314,21 @@ export class BoQuanLyBiaKarNaugh {
               if(giongNhau[j] !== nhiPhan[i][j]) giongNhau= giongNhau.substring(0,j)+'2'+giongNhau.substring(j+1);
           }
        }
+    //    console.log(giongNhau);
        let builder:BieuThucBuilder=new BieuThucBuilder().addToanTu(ToanTu.HOI);
        for (let i = 0; i < giongNhau.length; i++) {
+        //    console.log(this.danhSachBien[i].id);
            if(giongNhau[i] ==='2')continue;
-           if(giongNhau[i] ==='1')builder.addBieuThucCon(Helper.SAO_CHEP(this.danhSachBien[i]));
-           else builder.addBieuThucCon(Helper.PHU_DINH_MENH_DE(this.danhSachBien[i]));
-       }
-       return builder.build();
+           if(giongNhau[i] === '1'){
+               builder.addBieuThucCon(Helper.SAO_CHEP(this.danhSachBien[i]));
+               continue;
+            }
+           builder.addBieuThucCon(Helper.PHU_DINH_MENH_DE(this.danhSachBien[i]));
+        }
+        let kq = builder.build()
+        // console.log(kq.id);
+        // console.log('====\n');
+       return kq;
     }
 
     // private sapXepNhomTeBao(nhom:NhomTeBao, ketQua:number[]):NhomTeBao{
@@ -479,16 +487,16 @@ export namespace ChuyenDoiKarnaugh {
         }
         ChuyenSoSangString(teBao: number): string {
             switch (teBao) {
-                case 0: return '0000';
-                case 1: return '0001';
-                case 2: return '0010';
-                case 3: return '0011';
-                case 4: return '0100';
-                case 5: return '0101';
-                case 6: return '0110';
-                case 7: return '0111';
-                case 8: return '1000';
-                case 9: return '1001';
+                case 0: return  '0000';
+                case 1: return  '0001';
+                case 2: return  '0010';
+                case 3: return  '0011';
+                case 4: return  '0100';
+                case 5: return  '0101';
+                case 6: return  '0110';
+                case 7: return  '0111';
+                case 8: return  '1000';
+                case 9: return  '1001';
                 case 10: return '1010';
                 case 11: return '1011';
                 case 12: return '1100';

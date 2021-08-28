@@ -72,11 +72,68 @@ var ExpressionHelper;
             for (let i = 0; i < sizeChilds; i++) {
                 // console.log(expr.childs[i].id);
                 let index = parent.childs.findIndex(e => { return e.id === expr.childs[i].id; });
-                if (index === -1)
+                if (index === -1) {
                     return false;
+                }
                 parent.removeAt(index);
             }
             return true;
+        }
+        static contain2(expr, parent) {
+            if (expr.operator.id !== parent.operator.id)
+                return [];
+            if (this.Length(expr) > this.Length(parent))
+                return [];
+            expr = this.copy(expr);
+            parent = this.copy(parent);
+            let result = [];
+            let sizeChilds = expr.childs.length;
+            for (let i = 0; i < sizeChilds; i++) {
+                let index = parent.childs.findIndex(e => { return e.id === expr.childs[i].id; });
+                if (index === -1) {
+                    if (ExpressionHelper.Helper.laTuDon(expr.childs[i]))
+                        return [];
+                    let flag = false;
+                    for (let j = 0; j < parent.childs.length && !flag; j++) {
+                        if (ExpressionHelper.Helper.laTuDon(parent.childs[i]))
+                            continue;
+                        for (let z = 0; z < parent.childs[j].childs.length; z++) {
+                            if (expr.childs[i].id === parent.childs[j].childs[z].id) {
+                                flag = true;
+                                result.push(j);
+                                break;
+                            }
+                        }
+                    }
+                    if (!flag) {
+                        flag = true;
+                        for (let j = 0; j < parent.childs.length; j++) {
+                            let s = parent.childs[i];
+                            if (this.isPrimeOrConstant(s))
+                                continue;
+                            for (let z = 0; z < s.childs.length; z++) {
+                                if (!ExpressionHelper.Helper.laTuDon(s.childs[z])) {
+                                    flag = false;
+                                    break;
+                                }
+                            }
+                            if (!flag)
+                                break;
+                            if (s.id.includes(expr.childs[i].id)) {
+                                result.push(j);
+                                flag = true;
+                                break;
+                            }
+                            flag = false;
+                        }
+                        if (!flag)
+                            return [];
+                    }
+                }
+                else
+                    result.push(index);
+            }
+            return result;
         }
         static not(expr) {
             if (expr.operator.id === Operator_1.Operts.Type.PHU_DINH)
@@ -85,8 +142,9 @@ var ExpressionHelper;
         }
         static Length(P) {
             if (Helper.isPrimeOrConstant(P)) {
-                if (P.operator.id !== Operator_1.Operts.Type.PHU_DINH)
+                if (P.operator.id !== Operator_1.Operts.Type.PHU_DINH) {
                     return 0;
+                }
                 else
                     return 0.5;
             }
@@ -101,29 +159,31 @@ var ExpressionHelper;
                 rs += 4;
             if (P.operator.id === Operator_1.Operts.Type.KEO_THEO)
                 rs += 2;
+            // if(P.id.includes('1')||P.id.includes('0'))rs-=0.5;  
+            for (let i = 0; i < P.childs.length; i++) {
+                if (P.childs[i].id === '1' || P.childs[i].id === '0')
+                    rs -= 0.5;
+            }
             return rs;
         }
         static DOI_NGAU(exp) {
-            if (this.isPrimeOrConstant(exp))
-                return this.not(exp);
+            if (this.laTuDon(exp))
+                return null;
             let builder = new Expression_1.ExpressionBuilder();
             if (exp.operator.id !== Operator_1.Operts.Type.PHU_DINH) {
-                builder.addOperator(Operator_1.Operts.Type.PHU_DINH);
-                let b = new Expression_1.ExpressionBuilder();
                 for (let i = 0; i < exp.childs.length; i++) {
-                    b.addChild(this.not(exp.childs[i]));
+                    builder.addChild(this.not(exp.childs[i]));
                 }
                 builder.addOperator(exp.operator.id === Operator_1.Operts.Type.HOI ?
                     Operator_1.Operts.Type.TUYEN : Operator_1.Operts.Type.HOI);
-                builder.addChild(b.build());
-                return builder.build();
+                return this.checkAndChangeToPrime(builder.build());
             }
-            for (let i = 0; i < exp.childs.length; i++) {
-                builder.addChild(this.not(exp.childs[i]));
+            for (let i = 0; i < exp.childs[0].childs.length; i++) {
+                builder.addChild(this.not(exp.childs[0].childs[i]));
             }
             builder.addOperator(exp.childs[0].operator.id === Operator_1.Operts.Type.HOI ?
                 Operator_1.Operts.Type.TUYEN : Operator_1.Operts.Type.HOI);
-            return builder.build();
+            return this.checkAndChangeToPrime(builder.build());
         }
         static isLetter(str) {
             let n = str.charCodeAt(0);
@@ -137,6 +197,11 @@ var ExpressionHelper;
                 return exp;
             }
             return exp;
+        }
+        static laTuDon(exp) {
+            return ExpressionHelper.Helper.isPrimeOrConstant(exp) ||
+                (exp.operator.id === Operator_1.Operts.Type.PHU_DINH
+                    && ExpressionHelper.Helper.isPrimeOrConstant(exp.childs[0]));
         }
     }
     ExpressionHelper.Helper = Helper;

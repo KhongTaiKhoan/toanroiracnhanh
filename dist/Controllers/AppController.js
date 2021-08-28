@@ -3,11 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Controller = void 0;
 const ToanTuLogic_1 = require("../BieuDienTriThuc/ChuongLogic/ThanhPhanOpts/ToanTuLogic");
 const ChuyenStringThanhBieuThuc_1 = require("../BieuDienTriThuc/ChuongLogic/ThanhPhanFuncs/ChuyenStringThanhBieuThuc");
-const MenhDeTuongDuong_1 = require("../BieuDienTriThuc/BaiTap/BaiTap_Logic/MenhDeTuongDuong");
-const BieuThucMenhDe_1 = require("../BieuDienTriThuc/ChuongLogic/ThanhPhanC/BieuThucMenhDe");
 const Helper_1 = require("../BieuDienTriThuc/ChuongLogic/ThanhPhanFuncs/Helper");
 const SuyLuanLogic_1 = require("../BieuDienTriThuc/BaiTap/BaiTap_Logic/SuyLuanLogic");
-const ToanTuFactory_1 = require("../BieuDienTriThuc/ChuongLogic/ThanhPhanOpts/ToanTuFactory");
 const BangChanTri_1 = require("../BieuDienTriThuc/BaiTap/BaiTap_Logic/BangChanTri");
 const ToiThieuHoaKarNaugh_1 = require("../BieuDienTriThuc/DaiSoBoolean/ToiThieuHoaKarNaugh");
 const TapHop_1 = require("../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanC/TapHop");
@@ -16,6 +13,9 @@ const QuanHe_1 = require("../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanC/QuanHe");
 const HauTo_1 = require("../BieuDienTriThuc/BieuThucDaiSoZ/ThanhPhanFuncs/HauTo");
 const LopTuongDuong_1 = require("../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanFuncs/LopTuongDuong");
 const GiaiBaiQuanHeThuTu_1 = require("../BieuDienTriThuc/QuanHeHaiNgoi/ThanhPhanFuncs/GiaiBaiQuanHeThuTu");
+const Deduction_1 = require("../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/Deduction");
+const ExpressionToString_1 = require("../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/ExpressionToString");
+const Equivalence_1 = require("../BieuDienTriThuc/LogicMenhDe/ThanhPhanFuncs/Equivalence");
 class Controller {
     index(req, res) {
         let toanTus = [];
@@ -29,20 +29,26 @@ class Controller {
     }
     notBai(req, res) {
         let deBai = req.body.noidung;
-        console.log(deBai);
         deBai = deBai.replace(new RegExp('TRUE', 'g'), '1');
         deBai = deBai.replace(new RegExp('FALSE', 'g'), '0');
-        let bai = new MenhDeTuongDuong_1.MenhDeTuongDuong();
-        let lg = bai.giai(deBai);
-        if (lg === null || lg === []) {
+        // let bai:MenhDeTuongDuong = new MenhDeTuongDuong();
+        // let lg:LoiGiaiMenhDeTuongDuong[]|null=  bai.giai(deBai);
+        let trans = new Equivalence_1.Equivalence().giai(deBai);
+        console.log('sssss');
+        if (trans === null) {
             res.send({
                 complete: false
             });
         }
         else {
-            let VT = Helper_1.Helper.IN(bai.vt_clone);
-            let VP = Helper_1.Helper.IN(bai.vp_clone);
-            let loiGiai = lg;
+            let split = deBai.split('\u2261');
+            let VT = split[0];
+            let VP = split[1];
+            let loiGiai = [];
+            trans.forEach(e => {
+                let str = `${ExpressionToString_1.ExpressionToString(e.Exp())}  (${e.rule.name})`;
+                loiGiai.push(str);
+            });
             res.send({
                 complete: true,
                 loiGiai: loiGiai,
@@ -65,36 +71,46 @@ class Controller {
     postSuyDien(req, res) {
         let bai = new SuyLuanLogic_1.SuyDien.SuyDienLoGic();
         let deBai = req.body['deBai[]'];
-        let giaThiet = new BieuThucMenhDe_1.BieuThucMenhDe();
-        let ketLuan = new BieuThucMenhDe_1.BieuThucMenhDe();
-        ketLuan = ChuyenStringThanhBieuThuc_1.ChuyenStringThanhBieuThuc.chuyenDoi(deBai[deBai.length - 1]);
-        deBai.pop();
-        for (let i = 0; i < deBai.length; i++) {
-            giaThiet.bieuThucCons.push(ChuyenStringThanhBieuThuc_1.ChuyenStringThanhBieuThuc.chuyenDoi(deBai[i]));
-        }
-        giaThiet.toanTu = new ToanTuFactory_1.ToanTuFactory().create(ToanTuLogic_1.ToanTu.HOI);
-        bai.xayDungDeBai(giaThiet, ketLuan);
-        let loiGiai = bai.giai();
-        if (loiGiai === null) {
+        // let giaThiet:BieuThucMenhDe= new BieuThucMenhDe();
+        // let ketLuan:BieuThucMenhDe = new BieuThucMenhDe();
+        // ketLuan = ChuyenStringThanhBieuThuc.chuyenDoi(deBai[deBai.length-1]);
+        // deBai.pop();
+        // for(let i=0;i<deBai.length;i++){
+        //     giaThiet.bieuThucCons.push(ChuyenStringThanhBieuThuc.chuyenDoi(deBai[i]));
+        // }
+        // giaThiet.toanTu = new ToanTuFactory().create(ToanTu.HOI);
+        // bai.xayDungDeBai(giaThiet,ketLuan);
+        let KL = deBai[deBai.length - 1];
+        let GT = deBai.slice(0, deBai.length - 1);
+        //    let loiGiai:LoiGiaiSuyDien[]|null = bai.giai();
+        let reasoning = new Deduction_1.Deduction(GT, KL).giai();
+        if (reasoning === null) {
             res.send({ msg: false });
         }
         else {
             let chiTiet = [];
-            loiGiai.forEach(e => {
-                let left = `${e.index}. ${Helper_1.Helper.IN(e.bieuThucKetQua)}`;
-                let right = '';
-                if (e.target[0] === -1)
-                    right = '(GIẢ THIẾT)';
-                else {
-                    right = `Áp dụng ${e.luat} cho `;
-                    for (let i = 0; i < e.target.length; i++) {
-                        right += `(${e.target[i]}), `;
-                    }
-                    right = right.substr(0, right.length - 2);
-                }
-                chiTiet.push([left, right]);
+            //    loiGiai.forEach(e => {
+            //        let left = `${e.index}. ${Helper.IN(e.bieuThucKetQua)}`;
+            //        let right = '';
+            //        if (e.target[0] === -1) right = '(GIẢ THIẾT)';
+            //        else {
+            //            right = `Áp dụng ${e.luat} cho `;
+            //            for (let i = 0; i < e.target.length; i++) {
+            //                right += `(${e.target[i]}), `
+            //            }
+            //            right = right.substr(0, right.length - 2);
+            //        }
+            //        chiTiet.push([left, right]);
+            //    })
+            reasoning.forEach(e => {
+                let str = [];
+                str[0] = `${e.id}. ${ExpressionToString_1.ExpressionToString(e.exp)} `;
+                if (e.parent.length !== 0)
+                    str[1] = `( ${e.rule.name} ${e.parent})`;
+                else
+                    str[1] = '(GIA THIET)';
+                chiTiet.push(str);
             });
-            //    console.log(chiTiet);
             res.send({
                 msg: true,
                 data: chiTiet
@@ -145,7 +161,9 @@ class Controller {
             let bienCoSo = [];
             ketQuaRutGonHamBoolean.bienCoSo.forEach(e => { bienCoSo.push(Helper_1.Helper.IN(e)); });
             let bieuThucLonChuyenDoi = [];
-            ketQuaRutGonHamBoolean.bieuThucLonChuyenDoi.forEach(e => { bieuThucLonChuyenDoi.push(Helper_1.Helper.IN(e)); });
+            ketQuaRutGonHamBoolean.bieuThucLonChuyenDoi.forEach(e => {
+                bieuThucLonChuyenDoi.push(Helper_1.Helper.IN(e));
+            });
             let bieuThucChuyenDoi = [];
             ketQuaRutGonHamBoolean.bieuThucChuyenDoi.forEach(e => { bieuThucChuyenDoi.push(Helper_1.Helper.IN(e)); });
             res.send({

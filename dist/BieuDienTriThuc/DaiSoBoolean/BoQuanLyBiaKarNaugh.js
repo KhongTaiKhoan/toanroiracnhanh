@@ -276,16 +276,22 @@ class BoQuanLyBiaKarNaugh {
                     giongNhau = giongNhau.substring(0, j) + '2' + giongNhau.substring(j + 1);
             }
         }
+        //    console.log(giongNhau);
         let builder = new BieuThucBuilder_1.BieuThucBuilder().addToanTu(ToanTuLogic_1.ToanTu.HOI);
         for (let i = 0; i < giongNhau.length; i++) {
+            //    console.log(this.danhSachBien[i].id);
             if (giongNhau[i] === '2')
                 continue;
-            if (giongNhau[i] === '1')
+            if (giongNhau[i] === '1') {
                 builder.addBieuThucCon(Helper_1.Helper.SAO_CHEP(this.danhSachBien[i]));
-            else
-                builder.addBieuThucCon(Helper_1.Helper.PHU_DINH_MENH_DE(this.danhSachBien[i]));
+                continue;
+            }
+            builder.addBieuThucCon(Helper_1.Helper.PHU_DINH_MENH_DE(this.danhSachBien[i]));
         }
-        return builder.build();
+        let kq = builder.build();
+        // console.log(kq.id);
+        // console.log('====\n');
+        return kq;
     }
     // private sapXepNhomTeBao(nhom:NhomTeBao, ketQua:number[]):NhomTeBao{
     //     let ghiNhan:{id:number,dem:number}[]=[];

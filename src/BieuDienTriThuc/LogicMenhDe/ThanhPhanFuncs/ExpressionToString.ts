@@ -7,6 +7,7 @@ export function ExpressionToString(P: Expression):string {
     if (ExpressionHelper.Helper.isPrimeOrConstant(P)) {
         if(P.id === '0')return'FALSE';
         if(P.id==='1')return'TRUE';
+
         return P.id;
     }
 
@@ -20,7 +21,7 @@ export function ExpressionToString(P: Expression):string {
     let str:string = '';
     for (let i = 0; i < P.childs.length; i++) {
         if (ExpressionHelper.Helper.isPrimeOrConstant(P.childs[i]))
-           str+=P.childs[i].id;
+           str+=ExpressionToString(P.childs[i]);
         else if ( (P.childs[i].operator.id === Operts.Type.PHU_DINH )) 
            str+= `${ExpressionToString(P.childs[i])}`;  
         else
